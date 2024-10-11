@@ -87,15 +87,23 @@ for destination_IP in flows_per_IP:
             top_flows_bps = find_and_insert(top_flows_bps, "bps", flows_per_IP[destination_IP], "overwrite")
 
         if len(top_flows_pps) < X_pps:
-            top_flows_pps = find_and_insert(top_flows_bps, "pps", flows_per_IP[destination_IP], "append")
+            top_flows_pps = find_and_insert(top_flows_pps, "pps", flows_per_IP[destination_IP], "append")
 
         else:
-            top_flows_pps = find_and_insert(top_flows_bps, "pps", flows_per_IP[destination_IP], "overwrite")
+            top_flows_pps = find_and_insert(top_flows_pps, "pps", flows_per_IP[destination_IP], "overwrite")
 
         # print(len(top_flows_bps))
 
 print(len(top_flows_bps))
 print(len(top_flows_pps))
+
+
+# TO DO:
+# fix the top_flows_bps and top_flows_pps tables to include ip addresses
+# -> include them as an element in each flow (that's what I am about to do)
+
+print(top_flows_bps)
+print(top_flows_pps)
 
 
 

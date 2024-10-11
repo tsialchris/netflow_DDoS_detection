@@ -13,6 +13,7 @@ def find_and_insert(list, metric, element, flag):
             if element[metric] > list[i][metric]:
                 guard = False
                 list = insert_and_append(list, i, element)
+                break
             i = i + 1
 
         # just append it at the end if it is smaller than the rest
@@ -20,15 +21,16 @@ def find_and_insert(list, metric, element, flag):
             list.append(element)
 
         # print("exited while")
-    
+        print(flag)
+        print(len(list))
     # else if flag is "overwrite"
     else:
         i = 0
         while i < len(list):
             if element[metric] > list[i][metric]:
                 insert_and_overwrite(list, i, element)
+                break
             i = i + 1
-
 
     return list
 
@@ -39,7 +41,8 @@ def insert_and_append(list, index, element):
     temp = list[-1]
     # start from the end of the list
     j = len(list) - 1
-    while j > len(list) - index:
+    diff = len(list) - index - 2
+    while j > diff:
         # print(j, " - " , len(list) - index)
         list[j] = list[j - 1]
         j = j - 1
@@ -48,13 +51,14 @@ def insert_and_append(list, index, element):
     list.append(temp)
 
     # print("--insert_and_append--", index)
-
+    print("insert and append", len(list))
     return list
 
 def insert_and_overwrite(list, index, element):
     # start from the end of the list
     j = len(list) - 1
-    while j > len(list) - index:
+    diff = len(list) - index - 2
+    while j > diff:
         list[j] = list[j - 1]
         j = j - 1
     list[index] = element

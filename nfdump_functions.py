@@ -3,6 +3,8 @@
 # pass them on to the new_flow
 def add_new_IP_values(new_flow, parsed_flow):
 
+    new_flow["dst4_addr"] = parsed_flow["dst4_addr"]
+
     new_flow["in_packets"] = parsed_flow["in_packets"]
 
     new_flow["in_bytes"] = parsed_flow["in_bytes"]

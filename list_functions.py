@@ -1,36 +1,40 @@
 
 # find where to append the element and insert it
-def find_and_insert(list, metric, element, flag):
-    # print("element metric: ", int(element[metric]))
-    # print("list[i][metric]: ", list[i][metric])
-    if flag == "append":
-        guard = True
-        i = 0
-        list_length = len(list)
-        # parse the list to find if this metric is higher than the other values stored
-        while i < list_length:
-            # print(i, "---", len(list))
-            if element[metric] > list[i][metric]:
-                guard = False
-                list = insert_and_append(list, i, element)
-                break
-            i = i + 1
+def find_and_insert(list, metric, element, flag, protocol, port):
+    # print(element["proto"], " == ", protocol)
+    if (element["proto"] == protocol or protocol == "protocol_irrelevant") and (element["dst_port"] == port or port == "port_irrelevant"):
+        # print("element metric: ", int(element[metric]))
+        # print("list[i][metric]: ", list[i][metric])
+        if flag == "append":
+            guard = True
+            i = 0
+            list_length = len(list)
+            # print("list_length ", list_length)
+            # parse the list to find if this metric is higher than the other values stored
+            while i < list_length:
+                # print(i, "---", len(list))
+                if element[metric] > list[i][metric]:
+                    guard = False
+                    list = insert_and_append(list, i, element)
+                    break
+                # print("---after insert and append--- ", i)
+                i = i + 1
 
-        # just append it at the end if it is smaller than the rest
-        if guard:
-            list.append(element)
+            # just append it at the end if it is smaller than the rest
+            if guard:
+                list.append(element)
 
-        # print("exited while")
-        print(flag)
-        print(len(list))
-    # else if flag is "overwrite"
-    else:
-        i = 0
-        while i < len(list):
-            if element[metric] > list[i][metric]:
-                insert_and_overwrite(list, i, element)
-                break
-            i = i + 1
+            # print("exited while")
+            # print(flag)
+            # print(len(list))
+        # else if flag is "overwrite"
+        else:
+            i = 0
+            while i < len(list):
+                if element[metric] > list[i][metric]:
+                    insert_and_overwrite(list, i, element)
+                    break
+                i = i + 1
 
     return list
 
@@ -41,8 +45,8 @@ def insert_and_append(list, index, element):
     temp = list[-1]
     # start from the end of the list
     j = len(list) - 1
-    diff = len(list) - index - 2
-    while j > diff:
+
+    while j > index:
         # print(j, " - " , len(list) - index)
         list[j] = list[j - 1]
         j = j - 1
@@ -51,14 +55,14 @@ def insert_and_append(list, index, element):
     list.append(temp)
 
     # print("--insert_and_append--", index)
-    print("insert and append", len(list))
+    # print("insert and append", len(list))
     return list
 
 def insert_and_overwrite(list, index, element):
     # start from the end of the list
     j = len(list) - 1
-    diff = len(list) - index - 2
-    while j > diff:
+
+    while j > index:
         list[j] = list[j - 1]
         j = j - 1
     list[index] = element

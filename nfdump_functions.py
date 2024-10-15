@@ -48,6 +48,49 @@ def create_list(flows, differentiators):
 
     return differentiated_flows
 
+# def create_dicts(flows, differentiators):
+
+#     flows_per_IP = {}
+#     # flows_per_IP_protocol = {}
+#     # flows_per_IP_protocol_port = {}
+
+#     for flow in flows:
+
+#         destination_IP = flow["dst4_addr"]
+
+#         # not all entries have a destination port
+#         try:
+#             destination_port = flow["dst_port"]
+#         except:
+#             # print(counter)
+#             destination_port = "no destination port"
+            
+#         protocol = flow["proto"]
+
+#         # if the destination_IP already exists in flow_per_IP
+#         if destination_IP in flows_per_IP:
+#             flows_per_IP[destination_IP] = update_IP_values(flows_per_IP[destination_IP], flow)
+
+#             # if the protocol used already exists in
+#             if protocol in flows_per_IP[destination_IP]:
+#                 0==0
+
+
+#         # else, if the destination_IP is not present in flows_per_IP
+#         # create the value and add it
+#         else:
+#             # do not take into account flows with no traffic
+#             if flow["in_packets"] != 0 and flow["in_bytes"] != 0:
+#                 # initialize the dictionary of the new IP
+#                 flows_per_IP[destination_IP] = {}
+
+#                 flows_per_IP[destination_IP] = add_new_IP_values(flows_per_IP[destination_IP], flow)
+
+        
+
+#     # flows = [flows_per_IP, flows_per_IP_protocol, flows_per_IP_protocol_port]
+#     return flows
+
 # get all the necessary elements from the parsed_flow
 # pass them on to the new_flow
 def add_new_IP_values(new_flow, parsed_flow):
@@ -64,7 +107,7 @@ def add_new_IP_values(new_flow, parsed_flow):
     # this is used for metric calculations (take the average time instead of aggregating
     # into a single variable)
     new_flow["total_flows"] = 1
-
+    
     new_flow["proto"] = str(parsed_flow["proto"])
 
     # not all entrries have a destination port

@@ -104,37 +104,43 @@ class netflows():
 
         top_flows = []
 
-        for flow in self.flows:
+        for index in self.flows:
+            # print(getattr(self.flows[index], metric))
             # if the list is empty, populate it
             if len(top_flows) < number_of_flows:
-                top_flows.append(flow)
-                top_flows.sort(key=top_flows.metric)
+                top_flows.append(self.flows[index])
+                top_flows.sort(key= lambda x : getattr(self.flows[index], metric))
             else:
                 # find the top values:
                 i = 0
                 # go through the top_flows, if another value is higher, replace the correct element
                 while i < len(top_flows):
-                    if flow.metric > top_flows[i].metric:
-                        insert_and_overwrite(top_flows, i, flow)
+                    if getattr(self.flows[index], metric) > getattr(top_flows[i], metric):
+                        insert_and_overwrite(top_flows, i, self.flows[index])
+                        break
                     i = i + 1
 
-
+        print(self.print_top_flows(top_flows, metric))
 
         return top_flows
     
-    def get_top_protocol_flows(number_of_flows, metric, protocol):
+    def get_top_protocol_flows(self, number_of_flows, metric, protocol):
         top_flows = []
 
         return top_flows
 
-    def get_top_port_flows(number_of_flows, metric, protocol, port):
+    def get_top_port_flows(self, number_of_flows, metric, protocol, port):
         top_flows = []
 
         return top_flows
 
-    def print_top_flows(top_flows, metric):
-        print("----------------TOP FLOWS ", metric, "----------------")
+    def print_top_flows(self, top_flows, metric):
+        print("-------TOP FLOWS", metric, "-------")
 
+        for flow in top_flows:
+            print (flow.dst4_addr, ":", getattr(flow, metric))
+
+        print("-----------------------------")
 
 
 

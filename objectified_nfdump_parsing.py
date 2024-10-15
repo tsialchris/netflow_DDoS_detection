@@ -60,7 +60,10 @@ X_pps = 10
 # amount of top flows in terms of UDP
 X_UDP = 10
 
-# print(len(flows_per_IP))
+
+top_flows_bps = netflow_flows.get_top_IP_flows(X_bps, "bps")
+
+
 
 
 # print_top_list(top_flows_bps, "bps")

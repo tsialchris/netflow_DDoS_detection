@@ -11,6 +11,8 @@ from parsing_functions import flows_over_threshold_check
 from parsing_functions import print_top_list
 from parsing_functions import print_over_threshold_list
 
+from netflow_objects import netflow_flow
+
 # set the time duration of the file capture
 # used to calculate the packets per second (pps)
 # and bits per second (bps) metrics

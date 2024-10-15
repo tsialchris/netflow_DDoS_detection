@@ -42,14 +42,6 @@ for flow in flows:
 netflow_flows.calculate_metrics()
 
 
-top_flows_bps = []
-top_flows_pps = []
-top_flows_UDP = []
-top_flows_DNS = []
-total_flows_over_threshold = []
-UDP_flows_over_threshold = []
-DNS_flows_over_threshold = []
-
 
 # amount of top flows in terms of bps
 X_bps = 10
@@ -57,21 +49,37 @@ X_bps = 10
 # amount of top flows in terms of pps
 X_pps = 10
 
-# amount of top flows in terms of UDP
+# amount of top flows in UDP
 X_UDP = 10
 
-
-top_flows_bps = netflow_flows.get_top_IP_flows(X_bps, "bps")
-
-
+# amount of top flows in DNS
+X_DNS = 10
 
 
-# print_top_list(top_flows_bps, "bps")
-# print_top_list(top_flows_pps, "pps")
-# print_top_list(top_flows_UDP, "bps")
-# print_top_list(top_flows_UDP, "pps")
+# top_flows_bps = netflow_flows.get_top_IP_flows(X_bps, "bps")
+
+# top_flows_pps = netflow_flows.get_top_IP_flows(X_pps, "pps")
+
+# top_flows_UDP_bps = netflow_flows.get_top_protocol_flows(X_UDP, "bps", "17")
+
+# top_flows_UDP_pps = netflow_flows.get_top_protocol_flows(X_UDP, "pps", "17")
+
+top_flows_DNS_bps = netflow_flows.get_top_port_flows(X_UDP, "bps", "17", "53")
+
+top_flows_DNS_pps = netflow_flows.get_top_port_flows(X_UDP, "pps", "17", "53")
+
+
 
 # # print_over_threshold_list(flows_over_threshold, "bps")
 # # print_over_threshold_list(flows_over_threshold, "pps")
 # print_over_threshold_list(UDP_flows_over_threshold, "bps")
 # print_over_threshold_list(UDP_flows_over_threshold, "pps")
+
+
+# TO DO: CORRECT THE TOP FLOWS TABLES (UDP CANNOT BE MORE THAN TOTAL TRAFFIC)
+# problem seems to be in pps metric (bps looks OK)
+# FIXED! it was so stupid... 
+
+# one of these was the other way round
+#   self.in_bytes = self.in_bytes + flow["in_bytes"]
+#   self.in_packets = self.in_packets + flow["in_packets"]

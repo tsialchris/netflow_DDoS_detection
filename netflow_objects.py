@@ -100,8 +100,6 @@ class netflows():
 
         from list_functions import insert_and_overwrite
 
-        self.metric = metric
-
         top_flows = []
 
         for index in self.flows:
@@ -109,6 +107,10 @@ class netflows():
             # if the list is empty, populate it
             if len(top_flows) < number_of_flows:
                 top_flows.append(self.flows[index])
+                # cannot access self.flows[index].metric, have to use:
+                # getattr(self.flows[index], metric)
+
+                # sort the list based on the metric
                 top_flows.sort(key= lambda x : getattr(self.flows[index], metric))
             else:
                 # find the top values:
@@ -125,7 +127,44 @@ class netflows():
         return top_flows
     
     def get_top_protocol_flows(self, number_of_flows, metric, protocol):
+        from list_functions import insert_and_overwrite
+        
         top_flows = []
+
+        for index in self.flows:
+
+            # get the equivalent of self.flows[index].protocol
+            for protocol_index in self.flows[index].protocols:
+                # print(protocol_index)
+                # protocol_flow = getattr(self.flows[index].protocols, protocol)
+                # print(self.flows[index].protocols["1"].in_bytes)
+                # print(self.flows[index].protocols["17"].in_bytes)
+                # print(self.flows[index].protocols["6"].in_bytes)
+
+                # if the protocol provided matches the protocol of the flow
+                if protocol == protocol_index:
+                    protocol_flow = self.flows[index].protocols[protocol]
+                    # print("OK")
+                    # print(getattr(self.flows[index], metric))
+                    # if the list is empty, populate it
+                    if len(top_flows) < number_of_flows:
+                        top_flows.append(self.flows[index].protocols[protocol])
+                        # cannot access self.flows[index].metric, have to use:
+                        # getattr(self.flows[index], metric)
+
+                        # sort the list based on the metric
+                        top_flows.sort(key= lambda x : getattr(self.flows[index].protocols[protocol], metric))
+                    else:
+                        # find the top values:
+                        i = 0
+                        # go through the top_flows, if another value is higher, replace the correct element
+                        while i < len(top_flows):
+                            if getattr(self.flows[index].protocols[protocol], metric) > getattr(top_flows[i], metric):
+                                insert_and_overwrite(top_flows, i, self.flows[index].protocols[protocol])
+                                break
+                            i = i + 1
+        
+        print(self.print_top_flows(top_flows, metric))
 
         return top_flows
 
@@ -140,7 +179,7 @@ class netflows():
         for flow in top_flows:
             print (flow.dst4_addr, ":", getattr(flow, metric))
 
-        print("-----------------------------")
+        print("----------------------------")
 
 
 
@@ -172,7 +211,7 @@ class netflow_flow:
         protocol = str(flow["proto"])
 
         if not self.protocols:
-            new_protocol = netflow_protocol(protocol)
+            new_protocol = netflow_protocol(protocol, self.dst4_addr)
             self.protocols[protocol] = new_protocol
             self.protocols[protocol].add_port(flow, flow_duration)
         else:
@@ -181,7 +220,7 @@ class netflow_flow:
                 self.protocols[protocol].add_port(flow, flow_duration)
             # if the protocol is not present, add it and then add_port
             else:
-                new_protocol = netflow_protocol(protocol)
+                new_protocol = netflow_protocol(protocol, self.dst4_addr)
                 self.protocols[protocol] = new_protocol
                 self.protocols[protocol].add_port(flow, flow_duration)
 
@@ -212,7 +251,8 @@ class netflow_flow:
 class netflow_protocol(netflow_flow):
 
 
-    def __init__(self, protocol):
+    def __init__(self, protocol, dst4_addr):
+        self.dst4_addr = dst4_addr
         self.proto = protocol
         self.in_bytes = 0
         self.in_packets = 0
@@ -232,7 +272,7 @@ class netflow_protocol(netflow_flow):
     def add_port(self, flow, flow_duration):
         
         self.in_bytes = self.in_bytes + flow["in_bytes"]
-        self.in_packets = self.in_bytes + flow["in_packets"]
+        self.in_packets = self.in_packets + flow["in_packets"]
         self.duration = self.duration + flow_duration
         self.number_of_flows = self.number_of_flows + 1
 
@@ -243,14 +283,14 @@ class netflow_protocol(netflow_flow):
             pass
         try:
             if not self.ports:
-                new_port = netflow_port(flow)
+                new_port = netflow_port(flow, self.dst4_addr)
                 self.ports[dst_port] = new_port
                 self.ports[dst_port].update(flow, flow_duration)
             else:
                 # if the destination port is already present,
                 # update it
                 if dst_port in self.ports:
-                    self.ports[dst_port].update(flow, flow_duration)
+                    self.ports[dst_port].update(flow, flow_duration, self.dst4_addr)
                 # if the destination port is not present, create it, add it and update it
                 else:
                     new_port = netflow_port(dst_port)
@@ -283,7 +323,8 @@ class netflow_protocol(netflow_flow):
 
 
 class netflow_port(netflow_protocol):
-    def __init__(self, dst_port):
+    def __init__(self, dst_port, dst4_addr):
+        self.dst4_addr = dst4_addr
         self.dst_port = dst_port
         self.in_bytes = 0
         self.in_packets = 0

@@ -84,44 +84,40 @@ class netflows():
 
         # return flow
     
-    def get_top_IP_flows(self, number_of_flows, metric):
-
-        from list_functions import insert_and_overwrite
+    def get_threshold_and_top_IP_flows(self, number_of_flows, metric, metric_threshold, top_flag, threshold_flag):
+        from list_functions import check_and_insert
+        from list_functions import threshold_check
 
         top_flows = []
+        threshold_flows = {}
 
         for index in self.flows:
-            # print(getattr(self.flows[index], metric))
-            # if the list is empty, populate it
-
             IP_flow = self.flows[index]
 
-            if len(top_flows) < number_of_flows:
-                top_flows.append(IP_flow)
-                # cannot access self.flows[index].metric, have to use:
-                # getattr(self.flows[index], metric)
+            if top_flag:
+                # check for max and append if list is empty, overwrite if it is full
+                top_flows = check_and_insert(top_flows, IP_flow, number_of_flows, metric)
 
-                # sort the list based on the metric
-                # top_flows.sort(key= lambda x : getattr(IP_flow, metric))
-                top_flows = sorted(top_flows, key=lambda x: getattr(x, metric), reverse=True)
-            else:
-                # find the top values:
-                i = 0
-                # go through the top_flows, if another value is higher, replace the correct element
-                while i < len(top_flows):
-                    if getattr(IP_flow, metric) > getattr(top_flows[i], metric):
-                        insert_and_overwrite(top_flows, i, IP_flow)
-                        break
-                    i = i + 1
+            if threshold_flag:
+                # check if the metric that interests us is over the set threshold
+                threshold_flows = threshold_check(threshold_flows, IP_flow, metric, metric_threshold)
 
-        print(self.print_top_flows(top_flows, metric))
+        # print(self.print_top_flows(top_flows, metric))
 
-        return top_flows
+        sorted_threshold_flows = dict(sorted(threshold_flows.items(), 
+                                     key=lambda item: getattr(item[1], metric), 
+                                     reverse=True))
+
+        aggregate_flows = [top_flows, sorted_threshold_flows]
+
+        return aggregate_flows
     
-    def get_top_protocol_flows(self, number_of_flows, metric, protocol):
-        from list_functions import insert_and_overwrite
+    def get_threshold_and_top_protocol_flows(self, number_of_flows, metric, metric_threshold, protocol, tcp_flags, top_flag, threshold_flag):
+        from list_functions import check_and_insert
+        from list_functions import threshold_check
         
         top_flows = []
+        threshold_flows = {}
 
         for index in self.flows:
             
@@ -134,33 +130,44 @@ class netflows():
                 if protocol == protocol_index:
                     protocol_flow = IP_flow.protocols[protocol]
 
-                    # if the list is empty, populate it
-                    if len(top_flows) < number_of_flows:
-                        top_flows.append(protocol_flow)
-                        # cannot access self.flows[index].metric, have to use:
-                        # getattr(self.flows[index], metric)
+                    # if tcp_flags is unset, ignore them
+                    if tcp_flags == "........":
+                        if top_flag:
+                            # check for max and append if list is empty, overwrite if it is full
+                            top_flows = check_and_insert(top_flows, protocol_flow, number_of_flows, metric)
 
-                        # sort the list based on the metric
-                        # top_flows.sort(key= lambda x : getattr(protocol_flow, metric))
-                        top_flows = sorted(top_flows, key=lambda x: getattr(x, metric), reverse=True)
+                        if threshold_flag:
+                            # check if the metric that interests us is over the set threshold
+                            threshold_flows = threshold_check(threshold_flows, protocol_flow, metric, metric_threshold)
+                    
+                    # else, if we are looking for a specific pattern of tcp_flags:
+                    # do the same only when it is matched
                     else:
-                        # find the top values:
-                        i = 0
-                        # go through the top_flows, if another value is higher, replace the correct element
-                        while i < len(top_flows):
-                            if getattr(protocol_flow, metric) > getattr(top_flows[i], metric):
-                                insert_and_overwrite(top_flows, i, protocol_flow)
-                                break
-                            i = i + 1
+                        if tcp_flags == protocol_flow.tcp_flags:
+                            if top_flag:
+                                # check for max and append if list is empty, overwrite if it is full
+                                top_flows = check_and_insert(top_flows, protocol_flow, number_of_flows, metric)
+
+                            if threshold_flag:
+                                # check if the metric that interests us is over the set threshold
+                                threshold_flows = threshold_check(threshold_flows, protocol_flow, metric, metric_threshold)
         
-        print(self.print_top_flows(top_flows, metric))
+        # print(self.print_top_flows(top_flows, metric))
 
-        return top_flows
+        sorted_threshold_flows = dict(sorted(threshold_flows.items(), 
+                                     key=lambda item: getattr(item[1], metric), 
+                                     reverse=True))
 
-    def get_top_port_flows(self, number_of_flows, metric, protocol, port):
-        from list_functions import insert_and_overwrite
+        aggregate_flows = [top_flows, sorted_threshold_flows]
+
+        return aggregate_flows
+
+    def get_threshold_and_top_port_flows(self, number_of_flows, metric, metric_threshold, protocol, port, top_flag, threshold_flag):
+        from list_functions import check_and_insert
+        from list_functions import threshold_check
         
         top_flows = []
+        threshold_flows = {}
 
         for index in self.flows:
 
@@ -180,43 +187,46 @@ class netflows():
                         if port == port_index:
                             port_flow = protocol_flow.ports[port]
 
-                            # if the list is empty, populate it
-                            if len(top_flows) < number_of_flows:
-                                top_flows.append(port_flow)
-                                # cannot access self.flows[index].metric, have to use:
-                                # getattr(self.flows[index], metric)
+                            if top_flag:
+                                # check for max and append if list is empty, overwrite if it is full
+                                top_flows = check_and_insert(top_flows, port_flow, number_of_flows, metric)
 
-                                # sort the list based on the metric
-                                # top_flows.sort(key= lambda x : getattr(x, metric))
-                                top_flows = sorted(top_flows, key=lambda x: getattr(x, metric), reverse=True)
-                            else:
-                                # print("IN THE ELSE")
-                                # find the top values:
-                                i = 0
-                                # go through the top_flows, if another value is higher, replace the correct element
-                                while i < len(top_flows):
-                                    if getattr(port_flow, metric) > getattr(top_flows[i], metric):
-                                        # print("IN THE IF")
-                                        # print(self.print_top_flows(top_flows, metric))
-                                        insert_and_overwrite(top_flows, i, port_flow)
-                                        # print(self.print_top_flows(top_flows, metric))
-                                        break
-                                    i = i + 1
-        # top_flows.sort(key= lambda x : getattr(port_flow, metric))
-        # print(port_counter)
-        # top_flows_sorted = sorted(top_flows, key=lambda x: getattr(x, metric), reverse=True)
-        print(self.print_top_flows(top_flows, metric))
+                            if threshold_flag:
+                                # check if the metric that interests us is over the set threshold
+                                threshold_flows = threshold_check(threshold_flows, port_flow, metric, metric_threshold)
+        
+        # print(self.print_top_flows(top_flows, metric))
 
-        return top_flows
+        sorted_threshold_flows = dict(sorted(threshold_flows.items(), 
+                                     key=lambda item: getattr(item[1], metric), 
+                                     reverse=True))
+
+        aggregate_flows = [top_flows, sorted_threshold_flows]
+
+        return aggregate_flows
 
     def print_top_flows(self, top_flows, metric):
-        print("-------TOP FLOWS", metric, "-------")
+        print("------- TOP FLOWS", metric, "-------")
 
         for flow in top_flows:
             print (flow.dst4_addr, ":", getattr(flow, metric))
 
-        print("----------------------------")
+        print("-----------------------------")
 
+    def print_threshold_flows(self, threshold_flows, metric):
+        print("------ FLOWS OVER THRESHOLD", metric, "------")
+
+        for index in threshold_flows:
+            flow = threshold_flows[index]
+            print (flow.dst4_addr, ":", getattr(flow, metric))
+
+        # print(threshold_flows)
+        
+        # for flow in threshold_flows:
+        #     print(flow)
+        #     print (flow.dst4_addr, ":", getattr(flow, metric))
+
+        print("--------------------------------------")
 
 
 class netflow_flow:
@@ -246,8 +256,10 @@ class netflow_flow:
 
         protocol = str(flow["proto"])
 
+        tcp_flags = flow["tcp_flags"]
+
         if not self.protocols:
-            new_protocol = netflow_protocol(protocol, self.dst4_addr)
+            new_protocol = netflow_protocol(protocol, self.dst4_addr, tcp_flags)
             self.protocols[protocol] = new_protocol
             self.protocols[protocol].add_port(flow, flow_duration)
         else:
@@ -256,12 +268,9 @@ class netflow_flow:
                 self.protocols[protocol].add_port(flow, flow_duration)
             # if the protocol is not present, add it and then add_port
             else:
-                new_protocol = netflow_protocol(protocol, self.dst4_addr)
+                new_protocol = netflow_protocol(protocol, self.dst4_addr, tcp_flags)
                 self.protocols[protocol] = new_protocol
                 self.protocols[protocol].add_port(flow, flow_duration)
-
-        
-
 
 
     # def update(self, flow, flow_duration):
@@ -287,9 +296,10 @@ class netflow_flow:
 class netflow_protocol(netflow_flow):
 
 
-    def __init__(self, protocol, dst4_addr):
+    def __init__(self, protocol, dst4_addr, tcp_flags):
         self.dst4_addr = dst4_addr
         self.proto = protocol
+        self.tcp_flags = tcp_flags
         self.in_bytes = 0
         self.in_packets = 0
         self.duration = 0

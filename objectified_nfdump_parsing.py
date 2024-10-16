@@ -86,7 +86,7 @@ UDP_DNS_traffic_pps_threshold = config["UDP_DNS_traffic_pps_threshold"]
 # AGGREGATE FLOWS is 2 index list that contains [TOP_LIST, THRESHOLD_DICTIONARY]
 # TOP FLOWS are stored as lists, runtime might suffer for extreme cases
 
-aggregate_flows_IP_bps = netflow_flows.get_threshold_and_top_IP_flows(amount_top_flows_IP_bps, "bps", general_IP_traffic_bps_threshold, True, True)
+aggregate_top_flows_IP_bps = netflow_flows.get_threshold_and_top_IP_flows(amount_top_flows_IP_bps, "bps", general_IP_traffic_bps_threshold, True, True)
 aggregate_top_flows_IP_pps = netflow_flows.get_threshold_and_top_IP_flows(amount_top_flows_IP_pps, "pps", general_IP_traffic_pps_threshold, True, True)
 
 aggregate_top_flows_UDP_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_UDP, "bps", general_UDP_traffic_bps_threshold, "17", repr("........"), True, True)
@@ -112,8 +112,11 @@ aggregate_top_flows_12345_pps = netflow_flows.get_threshold_and_top_port_flows(1
 
 # THIS is how you PRINT
 
-# netflows.print_top_flows(netflows, aggregate_flows_IP_bps[0], "bps")
-# netflows.print_threshold_flows(netflows, aggregate_flows_IP_bps[1], "bps")
+netflows.print_top_flows(netflows, aggregate_top_flows_IP_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_IP_bps[1], "bps")
+
+netflows.print_top_flows(netflows, aggregate_top_flows_IP_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_IP_pps[1], "pps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_UDP_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_bps[1], "bps")

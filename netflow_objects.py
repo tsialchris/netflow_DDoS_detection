@@ -13,8 +13,11 @@ class netflows():
         from nfdump_functions import calculate_duration
         flow_duration = calculate_duration(flow)
 
-        if flow["in_bytes"] > 0 and flow["in_packets"] > 0 and flow_duration > 0:
-            
+        if (flow["in_bytes"] > 0 or flow["in_packets"] > 0) and (not ("dst6_addr" in flow)):
+
+            # ASSUMPTION: IGNORE any ipv6 packets
+
+            # print(flow)
             # flow_duration = calculate_duration(flow)
             destination_IP = flow["dst4_addr"]
 
@@ -59,6 +62,13 @@ class netflows():
         for destination_IP in self.flows:
             flow = self.flows[destination_IP]
 
+            # ASSUMPTION: if duration == 0, duration = 1
+            # this makes it easy to catch
+            # a lot of flows have a duration of 0
+            # do normal flows have a duration of 0?
+            if flow.duration == 0:
+                flow.duration = 1
+
             flow.pps = int(flow.in_packets / (flow.duration / flow.number_of_flows))
             flow.bps = int(flow.in_bytes / (flow.duration / flow.number_of_flows))
 
@@ -68,6 +78,13 @@ class netflows():
 
                 protocol_flow = flow.get_protocol(protocol)
 
+                # ASSUMPTION: if duration == 0, duration = 1
+                # this makes it easy to catch
+                # a lot of flows have a duration of 0
+                # do normal flows have a duration of 0?
+                if protocol_flow.duration == 0:
+                    protocol_flow.duration = 1
+
                 protocol_flow.pps = int(protocol_flow.in_packets / (protocol_flow.duration / protocol_flow.number_of_flows))
                 protocol_flow.bps = int(protocol_flow.in_bytes / (protocol_flow.duration / protocol_flow.number_of_flows))
 
@@ -76,6 +93,13 @@ class netflows():
 
                 for port in protocol_flow.ports:
                     port_flow = protocol_flow.get_port(port)
+
+                    # ASSUMPTION: if duration == 0, duration = 1
+                    # this makes it easy to catch
+                    # a lot of flows have a duration of 0
+                    # do normal flows have a duration of 0?
+                    if port_flow.duration == 0:
+                        port_flow.duration = 1
 
                     port_flow.pps = int(port_flow.in_packets / (port_flow.duration / port_flow.number_of_flows))
                     port_flow.bps = int(port_flow.in_bytes / (port_flow.duration / port_flow.number_of_flows))
@@ -115,6 +139,7 @@ class netflows():
     def get_threshold_and_top_protocol_flows(self, number_of_flows, metric, metric_threshold, protocol, tcp_flags, top_flag, threshold_flag):
         from list_functions import check_and_insert
         from list_functions import threshold_check
+        import re
         
         top_flows = []
         threshold_flows = {}
@@ -130,8 +155,11 @@ class netflows():
                 if protocol == protocol_index:
                     protocol_flow = IP_flow.protocols[protocol]
 
+                    # print(protocol_flow.tcp_flags)
                     # if tcp_flags is unset, ignore them
-                    if tcp_flags == "........":
+                    # if tcp_flags == '........':
+                    if re.match("\.{9}", protocol_flow.tcp_flags,):
+                        # print(protocol_flow.tcp_flags)
                         if top_flag:
                             # check for max and append if list is empty, overwrite if it is full
                             top_flows = check_and_insert(top_flows, protocol_flow, number_of_flows, metric)
@@ -143,7 +171,13 @@ class netflows():
                     # else, if we are looking for a specific pattern of tcp_flags:
                     # do the same only when it is matched
                     else:
+                        # print(protocol_flow.tcp_flags)
+                        # if protocol_flow.tcp_flags == "......S.":
+                        # if re.match("\.\.\.\.\.\.S\.", protocol_flow.tcp_flags):
+                        #     print("SYN FLOW")
+                            # print(protocol_flow.tcp_flags)
                         if tcp_flags == protocol_flow.tcp_flags:
+                        # if re.match(tcp_flags, protocol_flow.tcp_flags):
                             if top_flag:
                                 # check for max and append if list is empty, overwrite if it is full
                                 top_flows = check_and_insert(top_flows, protocol_flow, number_of_flows, metric)
@@ -248,6 +282,7 @@ class netflow_flow:
     #     self.protocols = {}
 
     def add_protocol(self, flow, flow_duration):
+        import re
 
         self.in_bytes = self.in_bytes + flow["in_bytes"]
         self.in_packets = self.in_packets + flow["in_packets"]
@@ -256,18 +291,44 @@ class netflow_flow:
 
         protocol = str(flow["proto"])
 
-        tcp_flags = flow["tcp_flags"]
+        tcp_flags = repr(flow["tcp_flags"])
+        # print(tcp_flags)
 
         if not self.protocols:
+            # print(tcp_flags)
             new_protocol = netflow_protocol(protocol, self.dst4_addr, tcp_flags)
             self.protocols[protocol] = new_protocol
             self.protocols[protocol].add_port(flow, flow_duration)
         else:
             # else if the protocol is already present, add_port
+            # print(tcp_flags)
+            guard = True
             if protocol in self.protocols:
-                self.protocols[protocol].add_port(flow, flow_duration)
+                # print(tcp_flags)
+                # need to check for flags as well before adding!
+                # TO DO
+                # NEW FLAGS ARE CONSIDERED NEW PORTS... will have to make do with that...
+                for search_protocol in self.protocols:
+                    print(self.protocols[search_protocol].tcp_flags, "==", tcp_flags)
+                    # re.match("\.{9}", protocol_flow.tcp_flags,)
+
+                    # THIS CHECK DOES NOT WORK...
+                    # if re.match(tcp_flags, self.protocols[search_protocol].tcp_flags):
+                    # ...AP... == ........
+                    # This check does not work either...
+                    # if(self.protocols[search_protocol].tcp_flags == tcp_flags):
+                    # ...APRS. == ...AP...
+                    if (self.protocols[search_protocol].tcp_flags) == (str((tcp_flags))):
+                        # print("...APRS." == "...AP...")
+                        print(repr(self.protocols[search_protocol].tcp_flags), "==", repr(tcp_flags))
+                        # print(self.protocols[search_protocol].tcp_flags, "==", tcp_flags)
+                        self.protocols[search_protocol].add_port(flow, flow_duration)
+                        guard = False
+                        break
+
             # if the protocol is not present, add it and then add_port
-            else:
+            if guard:
+                # print(self.dst4_addr, ":", tcp_flags)
                 new_protocol = netflow_protocol(protocol, self.dst4_addr, tcp_flags)
                 self.protocols[protocol] = new_protocol
                 self.protocols[protocol].add_port(flow, flow_duration)
@@ -299,7 +360,8 @@ class netflow_protocol(netflow_flow):
     def __init__(self, protocol, dst4_addr, tcp_flags):
         self.dst4_addr = dst4_addr
         self.proto = protocol
-        self.tcp_flags = tcp_flags
+        self.tcp_flags = repr(tcp_flags)
+        # print(self.tcp_flags)
         self.in_bytes = 0
         self.in_packets = 0
         self.duration = 0

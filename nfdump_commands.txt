@@ -1,0 +1,3 @@
+to convert nfcapd.xxxxx to .json:
+
+nfcapd.202410161540

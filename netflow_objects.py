@@ -66,17 +66,7 @@ class netflows():
 
             for protocol in flow.protocols:
 
-                # print("successful for")
-
                 protocol_flow = flow.get_protocol(protocol)
-
-                # print(protocol_flow)
-
-                
-
-                # print(protocol_flow.duration)
-                # print(protocol_flow.in_bytes)
-                # print(protocol_flow.in_packets)
 
                 protocol_flow.pps = int(protocol_flow.in_packets / (protocol_flow.duration / protocol_flow.number_of_flows))
                 protocol_flow.bps = int(protocol_flow.in_bytes / (protocol_flow.duration / protocol_flow.number_of_flows))
@@ -85,8 +75,6 @@ class netflows():
                 self.set_protocol(destination_IP, protocol, protocol_flow)
 
                 for port in protocol_flow.ports:
-                    # print("successful PORT for")
-                    # print(protocol_flow.ports[port].duration)
                     port_flow = protocol_flow.get_port(port)
 
                     port_flow.pps = int(port_flow.in_packets / (port_flow.duration / port_flow.number_of_flows))
@@ -105,20 +93,24 @@ class netflows():
         for index in self.flows:
             # print(getattr(self.flows[index], metric))
             # if the list is empty, populate it
+
+            IP_flow = self.flows[index]
+
             if len(top_flows) < number_of_flows:
-                top_flows.append(self.flows[index])
+                top_flows.append(IP_flow)
                 # cannot access self.flows[index].metric, have to use:
                 # getattr(self.flows[index], metric)
 
                 # sort the list based on the metric
-                top_flows.sort(key= lambda x : getattr(self.flows[index], metric))
+                # top_flows.sort(key= lambda x : getattr(IP_flow, metric))
+                top_flows = sorted(top_flows, key=lambda x: getattr(x, metric), reverse=True)
             else:
                 # find the top values:
                 i = 0
                 # go through the top_flows, if another value is higher, replace the correct element
                 while i < len(top_flows):
-                    if getattr(self.flows[index], metric) > getattr(top_flows[i], metric):
-                        insert_and_overwrite(top_flows, i, self.flows[index])
+                    if getattr(IP_flow, metric) > getattr(top_flows[i], metric):
+                        insert_and_overwrite(top_flows, i, IP_flow)
                         break
                     i = i + 1
 
@@ -132,35 +124,32 @@ class netflows():
         top_flows = []
 
         for index in self.flows:
+            
+            IP_flow = self.flows[index]
 
             # get the equivalent of self.flows[index].protocol
-            for protocol_index in self.flows[index].protocols:
-                # print(protocol_index)
-                # protocol_flow = getattr(self.flows[index].protocols, protocol)
-                # print(self.flows[index].protocols["1"].in_bytes)
-                # print(self.flows[index].protocols["17"].in_bytes)
-                # print(self.flows[index].protocols["6"].in_bytes)
+            for protocol_index in IP_flow.protocols:
 
                 # if the protocol provided matches the protocol of the flow
                 if protocol == protocol_index:
-                    protocol_flow = self.flows[index].protocols[protocol]
-                    # print("OK")
-                    # print(getattr(self.flows[index], metric))
+                    protocol_flow = IP_flow.protocols[protocol]
+
                     # if the list is empty, populate it
                     if len(top_flows) < number_of_flows:
-                        top_flows.append(self.flows[index].protocols[protocol])
+                        top_flows.append(protocol_flow)
                         # cannot access self.flows[index].metric, have to use:
                         # getattr(self.flows[index], metric)
 
                         # sort the list based on the metric
-                        top_flows.sort(key= lambda x : getattr(self.flows[index].protocols[protocol], metric))
+                        # top_flows.sort(key= lambda x : getattr(protocol_flow, metric))
+                        top_flows = sorted(top_flows, key=lambda x: getattr(x, metric), reverse=True)
                     else:
                         # find the top values:
                         i = 0
                         # go through the top_flows, if another value is higher, replace the correct element
                         while i < len(top_flows):
-                            if getattr(self.flows[index].protocols[protocol], metric) > getattr(top_flows[i], metric):
-                                insert_and_overwrite(top_flows, i, self.flows[index].protocols[protocol])
+                            if getattr(protocol_flow, metric) > getattr(top_flows[i], metric):
+                                insert_and_overwrite(top_flows, i, protocol_flow)
                                 break
                             i = i + 1
         
@@ -169,7 +158,54 @@ class netflows():
         return top_flows
 
     def get_top_port_flows(self, number_of_flows, metric, protocol, port):
+        from list_functions import insert_and_overwrite
+        
         top_flows = []
+
+        for index in self.flows:
+
+            IP_flow = self.flows[index]
+
+            # get the equivalent of self.flows[index].protocol
+            for protocol_index in IP_flow.protocols:
+
+                # if the protocol provided matches the protocol of the flow
+                if protocol == protocol_index:
+
+                    protocol_flow = IP_flow.protocols[protocol]
+
+                    for port_index in protocol_flow.ports:
+
+                        # if the port provided matches the port of the flow
+                        if port == port_index:
+                            port_flow = protocol_flow.ports[port]
+
+                            # if the list is empty, populate it
+                            if len(top_flows) < number_of_flows:
+                                top_flows.append(port_flow)
+                                # cannot access self.flows[index].metric, have to use:
+                                # getattr(self.flows[index], metric)
+
+                                # sort the list based on the metric
+                                # top_flows.sort(key= lambda x : getattr(x, metric))
+                                top_flows = sorted(top_flows, key=lambda x: getattr(x, metric), reverse=True)
+                            else:
+                                # print("IN THE ELSE")
+                                # find the top values:
+                                i = 0
+                                # go through the top_flows, if another value is higher, replace the correct element
+                                while i < len(top_flows):
+                                    if getattr(port_flow, metric) > getattr(top_flows[i], metric):
+                                        # print("IN THE IF")
+                                        # print(self.print_top_flows(top_flows, metric))
+                                        insert_and_overwrite(top_flows, i, port_flow)
+                                        # print(self.print_top_flows(top_flows, metric))
+                                        break
+                                    i = i + 1
+        # top_flows.sort(key= lambda x : getattr(port_flow, metric))
+        # print(port_counter)
+        # top_flows_sorted = sorted(top_flows, key=lambda x: getattr(x, metric), reverse=True)
+        print(self.print_top_flows(top_flows, metric))
 
         return top_flows
 

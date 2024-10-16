@@ -89,20 +89,20 @@ UDP_DNS_traffic_pps_threshold = config["UDP_DNS_traffic_pps_threshold"]
 aggregate_flows_IP_bps = netflow_flows.get_threshold_and_top_IP_flows(amount_top_flows_IP_bps, "bps", general_IP_traffic_bps_threshold, True, True)
 aggregate_top_flows_IP_pps = netflow_flows.get_threshold_and_top_IP_flows(amount_top_flows_IP_pps, "pps", general_IP_traffic_pps_threshold, True, True)
 
-aggregate_top_flows_UDP_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_UDP, "bps", general_UDP_traffic_bps_threshold, "17", r"........", True, True)
-aggregate_top_flows_UDP_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_UDP, "pps", general_UDP_traffic_pps_threshold, "17", r"........", True, True)
+aggregate_top_flows_UDP_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_UDP, "bps", general_UDP_traffic_bps_threshold, "17", repr("........"), True, True)
+aggregate_top_flows_UDP_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_UDP, "pps", general_UDP_traffic_pps_threshold, "17", repr("........"), True, True)
 
-aggregate_top_flows_TCP_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP, "bps", general_TCP_traffic_bps_threshold, "6", r"........", True, True)
-aggregate_top_flows_TCP_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP, "pps", general_TCP_traffic_pps_threshold, "6", r"........", True, True)
+aggregate_top_flows_TCP_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP, "bps", general_TCP_traffic_bps_threshold, "6", repr("........"), True, True)
+aggregate_top_flows_TCP_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP, "pps", general_TCP_traffic_pps_threshold, "6", repr("........"), True, True)
 
-aggregate_top_flows_TCP_RST_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_RST, "bps", TCP_RST_traffic_bps_threshold, "6", r".....R..", True, True)
-aggregate_top_flows_TCP_RST_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_RST, "pps", TCP_RST_traffic_pps_threshold, "6", r".....R..", True, True)
+aggregate_top_flows_TCP_RST_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_RST, "bps", TCP_RST_traffic_bps_threshold, "6", repr(".....R.."), True, True)
+aggregate_top_flows_TCP_RST_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_RST, "pps", TCP_RST_traffic_pps_threshold, "6", repr(".....R.."), True, True)
 
-aggregate_top_flows_TCP_SYN_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_SYN, "bps", TCP_SYN_traffic_bps_threshold, "6", r"......S.", True, True)
-aggregate_top_flows_TCP_SYN_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_SYN, "pps", TCP_SYN_traffic_pps_threshold, "6", r"......S.", True, True)
+aggregate_top_flows_TCP_SYN_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_SYN, "bps", TCP_SYN_traffic_bps_threshold, "6", repr("......S."), True, True)
+aggregate_top_flows_TCP_SYN_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_SYN, "pps", TCP_SYN_traffic_pps_threshold, "6", repr("......S."), True, True)
 
-aggregate_top_flows_TCP_FIN_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_FIN, "bps", TCP_FIN_traffic_bps_threshold, "6", r".......F", True, True)
-aggregate_top_flows_TCP_FIN_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_FIN, "pps", TCP_FIN_traffic_pps_threshold, "6", r".......F", True, True)
+aggregate_top_flows_TCP_FIN_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_FIN, "bps", TCP_FIN_traffic_bps_threshold, "6", repr(".......F"), True, True)
+aggregate_top_flows_TCP_FIN_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_FIN, "pps", TCP_FIN_traffic_pps_threshold, "6", repr(".......F"), True, True)
 
 aggregate_top_flows_DNS_bps = netflow_flows.get_threshold_and_top_port_flows(amount_top_flows_DNS, "bps", UDP_DNS_traffic_bps_threshold, "17", "53", True, True)
 aggregate_top_flows_DNS_pps = netflow_flows.get_threshold_and_top_port_flows(amount_top_flows_DNS, "pps", UDP_DNS_traffic_pps_threshold, "17", "53", True, True)
@@ -134,13 +134,13 @@ netflows.print_top_flows(netflows, aggregate_top_flows_TCP_SYN_pps[0], "pps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_FIN_bps[1], "bps")
 
 
-# netflows.print_top_flows(netflows, aggregate_top_flows_12345_pps[0], "pps")
-# # netflows.print_threshold_flows(netflows, aggregate_top_flows_12345_pps[1], "pps")
-
-# netflows.print_top_flows(netflows, aggregate_top_flows_12345_bps[0], "bps")
+netflows.print_top_flows(netflows, aggregate_top_flows_12345_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_12345_bps[1], "bps")
 
-print(aggregate_top_flows_TCP_SYN_bps)
+netflows.print_top_flows(netflows, aggregate_top_flows_12345_pps[0], "pps")
+# # netflows.print_threshold_flows(netflows, aggregate_top_flows_12345_pps[1], "pps")
+
+# print(aggregate_top_flows_TCP_SYN_bps)
 
 
 
@@ -162,3 +162,8 @@ print(aggregate_top_flows_TCP_SYN_bps)
 # "......S."    => only SYN flag set
 # ".......F"    => only FIN flag set
 
+
+# for i in netflow_flows.flows["10.2.0.6"].protocols["6"].ports:
+#     print(netflow_flows.flows["10.2.0.6"].protocols["6"].ports[i].tcp_flags)
+
+# The problem is that I am trying to add a new protocol in "6" when it is already there (kinda)

@@ -4,11 +4,6 @@ import json
 
 from netflow_objects import netflows
 
-# set the time duration of the file capture
-# used to calculate the packets per second (pps)
-# and bits per second (bps) metrics
-time_duration = 300
-
 # read the json file with all the flows
 # store them in "flows" as json objects
 # the format is [flow1, flow2, flow3, ...]
@@ -107,8 +102,13 @@ aggregate_top_flows_TCP_FIN_pps = netflow_flows.get_threshold_and_top_protocol_f
 aggregate_top_flows_DNS_bps = netflow_flows.get_threshold_and_top_port_flows(amount_top_flows_DNS, "bps", UDP_DNS_traffic_bps_threshold, "17", "53", True, True)
 aggregate_top_flows_DNS_pps = netflow_flows.get_threshold_and_top_port_flows(amount_top_flows_DNS, "pps", UDP_DNS_traffic_pps_threshold, "17", "53", True, True)
 
+
+# ================================================REMOVE THIS IN PRODUCTION============================================ #
 aggregate_top_flows_12345_bps = netflow_flows.get_threshold_and_top_port_flows(10, "bps", 10, "6", "12345", True, True)
 aggregate_top_flows_12345_pps = netflow_flows.get_threshold_and_top_port_flows(10, "pps", 10, "6", "12345", True, True)
+# ================================================REMOVE THIS IN PRODUCTION============================================ #
+
+
 
 # THIS is how you PRINT
 
@@ -137,13 +137,13 @@ netflows.print_top_flows(netflows, aggregate_top_flows_TCP_SYN_pps[0], "pps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_FIN_bps[1], "bps")
 
 
+# ================================================REMOVE THIS IN PRODUCTION============================================ #
 netflows.print_top_flows(netflows, aggregate_top_flows_12345_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_12345_bps[1], "bps")
 
 netflows.print_top_flows(netflows, aggregate_top_flows_12345_pps[0], "pps")
 # # netflows.print_threshold_flows(netflows, aggregate_top_flows_12345_pps[1], "pps")
-
-# print(aggregate_top_flows_TCP_SYN_bps)
+# ================================================REMOVE THIS IN PRODUCTION============================================ #
 
 
 
@@ -164,9 +164,3 @@ netflows.print_top_flows(netflows, aggregate_top_flows_12345_pps[0], "pps")
 # ".....R.."    => only RESET flag set
 # "......S."    => only SYN flag set
 # ".......F"    => only FIN flag set
-
-
-# for i in netflow_flows.flows["10.2.0.6"].protocols["6"].ports:
-#     print(netflow_flows.flows["10.2.0.6"].protocols["6"].ports[i].tcp_flags)
-
-# The problem is that I am trying to add a new protocol in "6" when it is already there (kinda)

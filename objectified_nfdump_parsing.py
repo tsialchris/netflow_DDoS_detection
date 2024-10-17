@@ -112,13 +112,13 @@ aggregate_top_flows_12345_pps = netflow_flows.get_threshold_and_top_port_flows(1
 
 # THIS is how you PRINT
 
-netflows.print_top_flows(netflows, aggregate_top_flows_IP_bps[0], "bps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_IP_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_IP_bps[1], "bps")
 
-netflows.print_top_flows(netflows, aggregate_top_flows_IP_pps[0], "pps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_IP_pps[0], "pps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_IP_pps[1], "pps")
 
-# netflows.print_top_flows(netflows, aggregate_top_flows_UDP_bps[0], "bps")
+netflows.print_top_flows(netflows, aggregate_top_flows_UDP_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_bps[1], "bps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_TCP_RST_bps[0], "bps")
@@ -127,10 +127,10 @@ netflows.print_top_flows(netflows, aggregate_top_flows_IP_pps[0], "pps")
 # netflows.print_top_flows(netflows, aggregate_top_flows_TCP_RST_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_RST_bps[1], "bps")
 
-netflows.print_top_flows(netflows, aggregate_top_flows_TCP_SYN_bps[0], "bps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_TCP_SYN_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_SYN_bps[1], "bps")
 
-netflows.print_top_flows(netflows, aggregate_top_flows_TCP_SYN_pps[0], "pps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_TCP_SYN_pps[0], "pps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_SYN_pps[1], "pps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_TCP_FIN_bps[0], "bps")
@@ -138,10 +138,10 @@ netflows.print_top_flows(netflows, aggregate_top_flows_TCP_SYN_pps[0], "pps")
 
 
 # ================================================REMOVE THIS IN PRODUCTION============================================ #
-netflows.print_top_flows(netflows, aggregate_top_flows_12345_bps[0], "bps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_12345_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_12345_bps[1], "bps")
 
-netflows.print_top_flows(netflows, aggregate_top_flows_12345_pps[0], "pps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_12345_pps[0], "pps")
 # # netflows.print_threshold_flows(netflows, aggregate_top_flows_12345_pps[1], "pps")
 # ================================================REMOVE THIS IN PRODUCTION============================================ #
 

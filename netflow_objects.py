@@ -56,7 +56,10 @@ class netflows():
         # print(flow)
 
         # CISCO default polling interval is 10 seconds
-        file_duration = 10
+        # file_duration = 10
+
+        # Collector limit is 2 minutes
+        file_duration = 120
 
         for destination_IP in self.flows:
             flow = self.flows[destination_IP]

@@ -4,15 +4,38 @@ import json
 
 from netflow_objects import netflows
 
+from misuse_objects import total_traffic
+
+from misuse_objects import total_UDP_traffic
+
+from misuse_objects import total_TCP_no_flags
+
+from misuse_objects import TCP_only_RST
+
+from misuse_objects import TCP_only_SYN
+
+from misuse_objects import TCP_only_FIN
+
+from misuse_objects import total_DNS
+
+from misuse_objects import total_X_port_destination
+
+from misuse_objects import total_X_port_source
+
+from misuse_objects import total_ICMP
+
+from misuse_objects import chargen_amplification
+
+
 # read the json file with all the flows
 # store them in "flows" as json objects
 # the format is [flow1, flow2, flow3, ...]
 # to parse, iterate through the table "flows"
 # each index is a dictionary
 
-# reading_file_location = "./nfcapd_latest.json"
+reading_file_location = "./nfcapd_latest.json"
 
-reading_file_location = "./syn_1.json"
+# reading_file_location = "./syn_1.json"
 
 if os.path.isfile(reading_file_location):
     with open(reading_file_location, "r") as file:
@@ -49,7 +72,7 @@ amount_top_flows_IP_pps = config["amount_top_flows_IP_pps"]
 amount_top_flows_UDP = config["amount_top_flows_UDP"]
 
 # amount of top flows in TCP
-amount_top_flows_TCP = config["amount_top_flows_TCP"]
+amount_top_flows_TCP = config["amount_top_flows_TCP_no_flags"]
 amount_top_flows_TCP_RST = config["amount_top_flows_TCP_RST"]
 amount_top_flows_TCP_SYN = config["amount_top_flows_TCP_SYN"]
 amount_top_flows_TCP_FIN = config["amount_top_flows_TCP_FIN"]
@@ -57,14 +80,20 @@ amount_top_flows_TCP_FIN = config["amount_top_flows_TCP_FIN"]
 # amount of top flows in DNS
 amount_top_flows_DNS = config["amount_top_flows_DNS"]
 
+# amount of top flows in ICMP
+amount_top_flows_ICMP = config["amount_top_flows_ICMP"]
+
+# chargen amplification
+amount_top_flows_chargen_amplification = config["amount_top_flows_chargen_amplification"]
+
 general_IP_traffic_bps_threshold = config["general_IP_traffic_bps_threshold"]
 general_IP_traffic_pps_threshold = config["general_IP_traffic_pps_threshold"]
 
 general_UDP_traffic_bps_threshold = config["general_UDP_traffic_bps_threshold"]
 general_UDP_traffic_pps_threshold = config["general_UDP_traffic_pps_threshold"]
 
-general_TCP_traffic_bps_threshold = config["general_TCP_traffic_bps_threshold"]
-general_TCP_traffic_pps_threshold = config["general_TCP_traffic_pps_threshold"]
+no_flags_TCP_traffic_bps_threshold = config["no_flags_TCP_traffic_bps_threshold"]
+no_flags_TCP_traffic_pps_threshold = config["no_flags_TCP_traffic_bps_threshold"]
 
 TCP_RST_traffic_bps_threshold = config["TCP_RST_traffic_bps_threshold"]
 TCP_RST_traffic_pps_threshold = config["TCP_RST_traffic_pps_threshold"]
@@ -78,34 +107,49 @@ TCP_FIN_traffic_pps_threshold = config["TCP_FIN_traffic_pps_threshold"]
 UDP_DNS_traffic_bps_threshold = config["UDP_DNS_traffic_bps_threshold"]
 UDP_DNS_traffic_pps_threshold = config["UDP_DNS_traffic_pps_threshold"]
 
+ICMP_traffic_bps_threshold = config["ICMP_traffic_bps_threshold"]
+ICMP_traffic_pps_threshold = config["ICMP_traffic_bps_threshold"]
+
+chargen_amplification_traffic_bps_threshold = config["chargen_amplification_traffic_bps_threshold"]
+chargen_amplification_traffic_pps_threshold = config["chargen_amplification_traffic_bps_threshold"]
+
 # AGGREGATE FLOWS is 2 index list that contains [TOP_LIST, THRESHOLD_DICTIONARY]
 # TOP FLOWS are stored as lists, runtime might suffer for extreme cases
 
-aggregate_top_flows_IP_bps = netflow_flows.get_threshold_and_top_IP_flows(amount_top_flows_IP_bps, "bps", general_IP_traffic_bps_threshold, True, True)
-aggregate_top_flows_IP_pps = netflow_flows.get_threshold_and_top_IP_flows(amount_top_flows_IP_pps, "pps", general_IP_traffic_pps_threshold, True, True)
+# aggregate_top_flows_IP_bps = get_threshold_and_top_IP_flows(netflow_flows, amount_top_flows_IP_bps, "bps", general_IP_traffic_bps_threshold, True, True)
+# aggregate_top_flows_IP_pps = get_threshold_and_top_IP_flows(netflow_flows, amount_top_flows_IP_pps, "pps", general_IP_traffic_pps_threshold, True, True)
 
-aggregate_top_flows_UDP_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_UDP, "bps", general_UDP_traffic_bps_threshold, "17", repr("........"), True, True)
-aggregate_top_flows_UDP_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_UDP, "pps", general_UDP_traffic_pps_threshold, "17", repr("........"), True, True)
+aggregate_top_flows_IP_bps = total_traffic(netflow_flows, amount_top_flows_IP_bps, "bps", general_IP_traffic_bps_threshold)
+aggregate_top_flows_IP_pps = total_traffic(netflow_flows, amount_top_flows_IP_pps, "pps", general_IP_traffic_pps_threshold)
 
-aggregate_top_flows_TCP_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP, "bps", general_TCP_traffic_bps_threshold, "6", repr("........"), True, True)
-aggregate_top_flows_TCP_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP, "pps", general_TCP_traffic_pps_threshold, "6", repr("........"), True, True)
+aggregate_top_flows_UDP_bps = total_UDP_traffic(netflow_flows, amount_top_flows_UDP, "bps", general_UDP_traffic_bps_threshold)
+aggregate_top_flows_UDP_pps = total_UDP_traffic(netflow_flows, amount_top_flows_UDP, "pps", general_UDP_traffic_pps_threshold)
 
-aggregate_top_flows_TCP_RST_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_RST, "bps", TCP_RST_traffic_bps_threshold, "6", repr(".....R.."), True, True)
-aggregate_top_flows_TCP_RST_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_RST, "pps", TCP_RST_traffic_pps_threshold, "6", repr(".....R.."), True, True)
+aggregate_top_flows_TCP_bps = total_TCP_no_flags(netflow_flows, amount_top_flows_TCP, "bps", no_flags_TCP_traffic_bps_threshold)
+aggregate_top_flows_TCP_pps = total_TCP_no_flags(netflow_flows, amount_top_flows_TCP, "pps", no_flags_TCP_traffic_pps_threshold)
 
-aggregate_top_flows_TCP_SYN_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_SYN, "bps", TCP_SYN_traffic_bps_threshold, "6", repr("......S."), True, True)
-aggregate_top_flows_TCP_SYN_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_SYN, "pps", TCP_SYN_traffic_pps_threshold, "6", repr("......S."), True, True)
+aggregate_top_flows_TCP_RST_bps = TCP_only_RST(netflow_flows, amount_top_flows_TCP_RST, "bps", TCP_RST_traffic_bps_threshold)
+aggregate_top_flows_TCP_RST_pps = TCP_only_RST(netflow_flows, amount_top_flows_TCP_RST, "pps", TCP_RST_traffic_pps_threshold)
 
-aggregate_top_flows_TCP_FIN_bps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_FIN, "bps", TCP_FIN_traffic_bps_threshold, "6", repr(".......F"), True, True)
-aggregate_top_flows_TCP_FIN_pps = netflow_flows.get_threshold_and_top_protocol_flows(amount_top_flows_TCP_FIN, "pps", TCP_FIN_traffic_pps_threshold, "6", repr(".......F"), True, True)
+aggregate_top_flows_TCP_SYN_bps = TCP_only_SYN(netflow_flows, amount_top_flows_TCP_SYN, "bps", TCP_SYN_traffic_bps_threshold)
+aggregate_top_flows_TCP_SYN_pps = TCP_only_SYN(netflow_flows, amount_top_flows_TCP_SYN, "pps", TCP_SYN_traffic_pps_threshold)
 
-aggregate_top_flows_DNS_bps = netflow_flows.get_threshold_and_top_port_flows(amount_top_flows_DNS, "bps", UDP_DNS_traffic_bps_threshold, "17", "53", True, True)
-aggregate_top_flows_DNS_pps = netflow_flows.get_threshold_and_top_port_flows(amount_top_flows_DNS, "pps", UDP_DNS_traffic_pps_threshold, "17", "53", True, True)
+aggregate_top_flows_TCP_FIN_bps = TCP_only_FIN(netflow_flows, amount_top_flows_TCP_FIN, "bps", TCP_FIN_traffic_bps_threshold)
+aggregate_top_flows_TCP_FIN_pps = TCP_only_FIN(netflow_flows, amount_top_flows_TCP_FIN, "pps", TCP_FIN_traffic_pps_threshold)
+
+aggregate_top_flows_DNS_bps = total_DNS(netflow_flows, amount_top_flows_DNS, "bps", UDP_DNS_traffic_bps_threshold)
+aggregate_top_flows_DNS_pps = total_DNS(netflow_flows, amount_top_flows_DNS, "pps", UDP_DNS_traffic_pps_threshold)
+ 
+aggregate_top_flows_ICMP_bps = total_ICMP(netflow_flows, amount_top_flows_ICMP, "bps", ICMP_traffic_bps_threshold)
+aggregate_top_flows_ICMP_pps = total_ICMP(netflow_flows, amount_top_flows_ICMP, "pps", ICMP_traffic_pps_threshold)
+
+aggregate_top_flows_chargen_amplification_bps = chargen_amplification(netflow_flows, amount_top_flows_chargen_amplification, "bps", chargen_amplification_traffic_bps_threshold)
+aggregate_top_flows_chargen_amplification_pps = chargen_amplification(netflow_flows, amount_top_flows_chargen_amplification, "pps", chargen_amplification_traffic_pps_threshold)
 
 
 # ================================================REMOVE THIS IN PRODUCTION============================================ #
-aggregate_top_flows_12345_bps = netflow_flows.get_threshold_and_top_port_flows(10, "bps", 10, "6", "12345", True, True)
-aggregate_top_flows_12345_pps = netflow_flows.get_threshold_and_top_port_flows(10, "pps", 10, "6", "12345", True, True)
+# aggregate_top_flows_12345_bps = total_X_port(netflow_flows, 10, "bps", 10, "6", "12345")
+# aggregate_top_flows_12345_pps = total_X_port(netflow_flows, 10, "pps", 10, "6", "12345")
 # ================================================REMOVE THIS IN PRODUCTION============================================ #
 
 
@@ -118,7 +162,7 @@ aggregate_top_flows_12345_pps = netflow_flows.get_threshold_and_top_port_flows(1
 # netflows.print_top_flows(netflows, aggregate_top_flows_IP_pps[0], "pps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_IP_pps[1], "pps")
 
-netflows.print_top_flows(netflows, aggregate_top_flows_UDP_bps[0], "bps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_UDP_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_bps[1], "bps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_TCP_RST_bps[0], "bps")
@@ -136,13 +180,32 @@ netflows.print_top_flows(netflows, aggregate_top_flows_UDP_bps[0], "bps")
 # netflows.print_top_flows(netflows, aggregate_top_flows_TCP_FIN_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_FIN_bps[1], "bps")
 
+# netflows.print_top_flows(netflows, aggregate_top_flows_DNS_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_DNS_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_DNS_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_DNS_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_ICMP_bps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_ICMP_bps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_ICMP_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_ICMP_bps[1], "bps")
+
+
+netflows.print_top_flows(netflows, aggregate_top_flows_chargen_amplification_pps[0], "pps")
+netflows.print_threshold_flows(netflows, aggregate_top_flows_chargen_amplification_pps[1], "pps")
+
+netflows.print_top_flows(netflows, aggregate_top_flows_chargen_amplification_bps[0], "bps")
+netflows.print_threshold_flows(netflows, aggregate_top_flows_chargen_amplification_bps[1], "bps")
+
 
 # ================================================REMOVE THIS IN PRODUCTION============================================ #
 # netflows.print_top_flows(netflows, aggregate_top_flows_12345_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_12345_bps[1], "bps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_12345_pps[0], "pps")
-# # netflows.print_threshold_flows(netflows, aggregate_top_flows_12345_pps[1], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_12345_pps[1], "pps")
 # ================================================REMOVE THIS IN PRODUCTION============================================ #
 
 

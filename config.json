@@ -5,12 +5,16 @@
 
     "amount_top_flows_UDP" : 10,
 
-    "amount_top_flows_TCP" : 10,
+    "amount_top_flows_TCP_no_flags" : 10,
     "amount_top_flows_TCP_RST" : 10,
     "amount_top_flows_TCP_SYN" : 10,
     "amount_top_flows_TCP_FIN" : 10,
 
     "amount_top_flows_DNS" : 10,
+
+    "amount_top_flows_ICMP" : 10,
+
+    "amount_top_flows_chargen_amplification" : 10,
 
 
     "general_IP_traffic_bps_threshold" : 100000,
@@ -19,8 +23,8 @@
     "general_UDP_traffic_bps_threshold" : 100000,
     "general_UDP_traffic_pps_threshold" : 100,
 
-    "general_TCP_traffic_bps_threshold" : 100000,
-    "general_TCP_traffic_pps_threshold" : 100,
+    "no_flags_TCP_traffic_bps_threshold" : 100000,
+    "no_flags_TCP_traffic_pps_threshold" : 100,
 
     "TCP_RST_traffic_bps_threshold" : 100,
     "TCP_RST_traffic_pps_threshold" : 10,
@@ -32,5 +36,11 @@
     "TCP_FIN_traffic_pps_threshold" : 10,
 
     "UDP_DNS_traffic_bps_threshold" : 100,
-    "UDP_DNS_traffic_pps_threshold" : 10
+    "UDP_DNS_traffic_pps_threshold" : 10,
+
+    "ICMP_traffic_bps_threshold" : 100,
+    "ICMP_traffic_pps_threshold" : 10,
+
+    "chargen_amplification_traffic_bps_threshold" : 100,
+    "chargen_amplification_traffic_pps_threshold" : 10
 }

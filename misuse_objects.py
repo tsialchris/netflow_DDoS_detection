@@ -137,3 +137,20 @@ def UDP_IP_fragments(netflow_flows, amount_top_flows, metric, metric_threshold):
 
     return aggregate_flows
 
+
+# DONE categories:      13
+# PENDING categories:   12
+# LEFT TO DO:
+# IPv4 Protocol 0
+# L2TP Reflection/Amplification (Needs packet size)
+# mDNS Reflection/Amplification
+# memcached Amplification
+# MS SQL RS Amplification
+# NetBIOS Reflection/Amplification
+# NTP Amplification (Needs packet size)
+# RIPv1 Reflection/Amplification
+# rpcbind Reflection/Amplification
+# SNMP Amplification
+# SSDP Amplification
+# TCP ACK (disabled by default)
+

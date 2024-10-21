@@ -1,6 +1,6 @@
 
 # overall container for all flows
-class netflows():
+class netflows:
 
     def __init__(self):
         self.flows = {}
@@ -276,7 +276,8 @@ class netflow_flow:
 
 # Note: __slots__ could be useful
 
-class netflow_protocol(netflow_flow):
+# goes in netflow_flow
+class netflow_protocol:
 
 
     def __init__(self, protocol, dst4_addr, tcp_flags):
@@ -291,25 +292,12 @@ class netflow_protocol(netflow_flow):
         self.src_ports = {}
         # self.source_ports = {}
         self.tcp_flags = {}
+
+        # IP_fragments have dst_port == "0" and src_port == "0"
+        # this will be a dictionary with only ONE element present
+        # the identifier is the dst4_addr, as a result only one element will be present and the key is the self.dst4_addr
+        self.IP_fragments = {}
         
-
-    def add_tcp_flag(self, flow, flow_duration):
-        tcp_flag_string = repr(flow["tcp_flags"])
-
-        if not self.tcp_flags:
-            new_tcp_flag = tcp_flag(tcp_flag_string, self.dst4_addr)
-            self.tcp_flags[tcp_flag_string] = new_tcp_flag
-            self.tcp_flags[tcp_flag_string].update(flow, flow_duration)
-        else:
-            # if the destination port is already present,
-            # update it
-            if tcp_flag_string in self.tcp_flags:
-                self.tcp_flags[tcp_flag_string].update(flow, flow_duration)
-            # if the tcp flag is not present, create it, add it and update it
-            else:
-                new_tcp_flag = tcp_flag(tcp_flag_string, self.dst4_addr)
-                self.tcp_flags[tcp_flag_string] = new_tcp_flag
-                self.tcp_flags[tcp_flag_string].update(flow, flow_duration)
     
     def add_port_and_flag(self, flow, flow_duration):
         
@@ -327,6 +315,63 @@ class netflow_protocol(netflow_flow):
         if "src_port" in flow:
             self.src_ports = self.add_source_or_destination_port(flow, "src", flow_duration)
 
+        # if both dst_port and src_port are present (i.e., most cases)
+        # if both of them == "0" and tcp_flags == repr("........") add to IP_fragments
+
+        # print(repr(flow["tcp_flags"]) , "==", repr("........"))
+        # print(repr(flow["tcp_flags"]) == repr("........"))
+        
+        if ("dst_port" in flow) and ("src_port" in flow):
+            if str(flow["dst_port"]) == "0" and str(flow["src_port"]) == "0"and repr(flow["tcp_flags"]) == repr("........"):
+                # print("in IP fragment misuse")
+                self.IP_fragments = self.add_to_category(self.IP_fragments, "IP_fragment", self.dst4_addr, flow, flow_duration)
+
+
+    def add_to_category(self, dictionary, object_name, identifier, flow, flow_duration):
+        import sys
+        import inspect
+
+        if not dictionary:
+            # print(tuple(sys.modules))
+            # print(inspect.getmembers(sys.modules[object_name]))
+
+            # create the object based on the classes that are available
+            # match the object_name variable with the available classes and then create the object based on that
+            for name, obj in inspect.getmembers(sys.modules[__name__]):
+                # if inspect.isclass(obj):
+                # print(name, "==", object_name)
+                if name == object_name:
+                    # print(obj)
+                    new_object = obj(identifier, self.dst4_addr)
+                    
+            dictionary[identifier] = new_object
+            dictionary[identifier].update(flow, flow_duration)
+        else:
+            # if the destination port is already present,
+            # update it
+            if identifier in dictionary:
+                dictionary[identifier].update(flow, flow_duration)
+            # if the tcp flag is not present, create it, add it and update it
+            else:
+                # create the object based on the classes that are available
+                # match the object_name variable with the available classes and then create the object based on that
+                for name, obj in inspect.getmembers(sys.modules[__name__]):
+                    # if inspect.isclass(obj):
+                    # print(name, "==", object_name)
+                    if name == object_name:
+                        # print(obj)
+                        new_object = obj(identifier, self.dst4_addr)
+                dictionary[identifier] = new_object
+                dictionary[identifier].update(flow, flow_duration)
+
+        return dictionary
+
+    def add_tcp_flag(self, flow, flow_duration):
+        tcp_flag_string = repr(flow["tcp_flags"])
+
+        self.tcp_flags = self.add_to_category(self.tcp_flags, "tcp_flag", tcp_flag_string, flow, flow_duration)
+
+
     def add_source_or_destination_port(self, flow, port_var, flow_duration):
 
         port_key = port_var + "_port"
@@ -337,21 +382,8 @@ class netflow_protocol(netflow_flow):
         # "destination" + "_ports"
         # "source" + "_ports"
         port_dictionary = self.__dict__[port_var + "_ports"]
-
-        if not port_dictionary:
-            new_port = netflow_port(port, self.dst4_addr)
-            port_dictionary[port] = new_port
-            port_dictionary[port].update(flow, flow_duration)
-        else:
-            # if the destination port is already present,
-            # update it
-            if port in port_dictionary:
-                port_dictionary[port].update(flow, flow_duration)
-            # if the destination port is not present, create it, add it and update it
-            else:
-                new_port = netflow_port(port, self.dst4_addr)
-                port_dictionary[port] = new_port
-                port_dictionary[port].update(flow, flow_duration)
+        
+        port_dictionary = self.add_to_category(port_dictionary, "netflow_port", port, flow, flow_duration)
 
         return port_dictionary
 
@@ -375,8 +407,8 @@ class netflow_protocol(netflow_flow):
         self.dst_ports[tcp_flag_var] = tcp_flag_flow
 
 
-
-class netflow_port(netflow_protocol):
+# goes in netflow_protocol
+class netflow_port:
     def __init__(self, dst_port, dst4_addr):
         self.dst4_addr = dst4_addr
         self.dst_port = dst_port
@@ -391,11 +423,34 @@ class netflow_port(netflow_protocol):
         self.number_of_flows = self.number_of_flows + 1
         self.duration = self.duration + flow_duration
 
-class tcp_flag(netflow_protocol):
+# goes in netflow_protocol
+class tcp_flag:
     def __init__(self, flag, dst4_addr):
         self.dst4_addr = dst4_addr
 
         self.flag = flag
+        
+        self.in_bytes = 0
+        self.in_packets = 0
+        self.number_of_flows = 0
+        self.duration = 0
+    
+    def update(self, flow, flow_duration):
+        self.in_bytes = self.in_bytes + flow["in_bytes"]
+        self.in_packets = self.in_packets + flow["in_packets"]
+        self.number_of_flows = self.number_of_flows + 1
+        self.duration = self.duration + flow_duration
+
+# goes in netflow_protocol
+class IP_fragment:
+    def __init__(self, identifier, dst4_addr):
+
+        self.dst4_addr = dst4_addr
+
+        # identifier is added as input for compatibility reasons (add_to_category_function)
+        # the identifier is always == dst4_addr
+        # since this is the IP_fragment identifier
+        self.identifier = dst4_addr
         
         self.in_bytes = 0
         self.in_packets = 0

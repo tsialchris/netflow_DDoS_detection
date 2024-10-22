@@ -57,6 +57,9 @@ class netflows:
     def set_tcp_flag(self, destination_IP, protocol, tcp_flag_var, flow):
         self.flows[destination_IP].protocols[protocol].set_tcp_flag(tcp_flag_var, flow)
 
+    def set_IP_fragment(self, destination_IP, protocol, IP_fragment_var, flow):
+        self.flows[destination_IP].protocols[protocol].set_IP_fragment(IP_fragment_var, flow)
+
     def calculate_metrics(self):
 
         # print(flow)
@@ -168,6 +171,27 @@ class netflows:
 
 
                     self.set_src_port(destination_IP, protocol, port, port_flow)
+
+                for IP_fragment in protocol_flow.IP_fragments:
+                    port_flow = protocol_flow.get_IP_fragment(IP_fragment)
+
+                    # ASSUMPTION: if duration == 0, duration = 1
+                    # this makes it easy to catch
+                    # a lot of flows have a duration of 0
+                    # do normal flows have a duration of 0?
+                    if port_flow.duration == 0:
+                        port_flow.duration = 1
+
+                    # METHOD 1
+                    port_flow.pps = int(port_flow.in_packets / (port_flow.duration / port_flow.number_of_flows))
+                    port_flow.bps = int(port_flow.in_bytes / (port_flow.duration / port_flow.number_of_flows))
+
+                    # METHOD 2
+                    # port_flow.pps = int(port_flow.in_packets / file_duration)
+                    # port_flow.bps = int(port_flow.in_bytes / file_duration)
+
+
+                    self.set_IP_fragment(destination_IP, protocol, IP_fragment, port_flow)
                     
 
     def print_top_flows(self, top_flows, metric):
@@ -408,6 +432,9 @@ class netflow_protocol(netflow_flow):
     def get_tcp_flag(self, tcp_flag_var):
         return self.tcp_flags[tcp_flag_var]
     
+    def get_IP_fragment(self, IP_fragment_var):
+        return self.IP_fragments[IP_fragment_var]
+    
     def set_dst_port(self, port_number, port_flow):
         self.dst_ports[port_number] = port_flow
 
@@ -416,6 +443,9 @@ class netflow_protocol(netflow_flow):
 
     def set_tcp_flag(self, tcp_flag_var, tcp_flag_flow):
         self.dst_ports[tcp_flag_var] = tcp_flag_flow
+
+    def set_IP_fragment(self, IP_fragment_var, IP_fragment_flow):
+        self.dst_ports[IP_fragment_var] = IP_fragment_flow
 
 
 # goes in netflow_protocol

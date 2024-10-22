@@ -1,0 +1,21 @@
+[
+{
+	"type" : "FLOW",
+	"sampled" : 0,
+	"export_sysid" : 0,
+	"first" : "2018-07-18T11:00:23.825",
+	"last" : "2018-07-18T11:00:24.276",
+	"received" : "2024-10-22T15:18:10.541",
+	"in_packets" : 903,
+	"in_bytes" : 602820,
+	"proto" : 17,
+	"tcp_flags" : "........",
+	"src_port" : 0,
+	"dst_port" : 0,
+	"src_tos" : 0,
+	"src4_addr" : "62.103.0.10",
+	"dst4_addr" : "212.205.221.3",
+	"src_geo" : "",
+	"dst_geo" : "",
+	"label" : "<none>"
+}]

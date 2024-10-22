@@ -72,7 +72,9 @@ from misuse_objects import NTP_amplification
 
 # icmp-src53.json "./syn_1.json"
 
-reading_file_location = "./icmp-src53.json"
+# reading_file_location = "./icmp-src53.json"
+
+reading_file_location = "./frag.json"
 
 if os.path.isfile(reading_file_location):
     with open(reading_file_location, "r") as file:
@@ -380,23 +382,23 @@ aggregate_top_flows_NTP_amplification_pps = NTP_amplification(netflow_flows, amo
 # netflows.print_top_flows(netflows, aggregate_top_flows_CLDAP_amplification_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_CLDAP_amplification_bps[1], "bps")
 
-netflows.print_top_flows(netflows, aggregate_top_flows_DNS_amplification_pps[0], "pps")
-netflows.print_threshold_flows(netflows, aggregate_top_flows_DNS_amplification_pps[1], "pps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_DNS_amplification_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_DNS_amplification_pps[1], "pps")
 
-netflows.print_top_flows(netflows, aggregate_top_flows_DNS_amplification_bps[0], "bps")
-netflows.print_threshold_flows(netflows, aggregate_top_flows_DNS_amplification_bps[1], "bps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_DNS_amplification_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_DNS_amplification_bps[1], "bps")
 
-# netflows.print_top_flows(netflows, aggregate_top_flows_TCP_IP_fragments_pps[0], "pps")
-# netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_IP_fragments_pps[1], "pps")
+netflows.print_top_flows(netflows, aggregate_top_flows_TCP_IP_fragments_pps[0], "pps")
+netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_IP_fragments_pps[1], "pps")
 
-# netflows.print_top_flows(netflows, aggregate_top_flows_TCP_IP_fragments_bps[0], "bps")
-# netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_IP_fragments_bps[1], "bps")
+netflows.print_top_flows(netflows, aggregate_top_flows_TCP_IP_fragments_bps[0], "bps")
+netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_IP_fragments_bps[1], "bps")
 
-# netflows.print_top_flows(netflows, aggregate_top_flows_UDP_IP_fragments_pps[0], "pps")
-# netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_IP_fragments_pps[1], "pps")
+netflows.print_top_flows(netflows, aggregate_top_flows_UDP_IP_fragments_pps[0], "pps")
+netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_IP_fragments_pps[1], "pps")
 
-# netflows.print_top_flows(netflows, aggregate_top_flows_UDP_IP_fragments_bps[0], "bps")
-# netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_IP_fragments_bps[1], "bps")
+netflows.print_top_flows(netflows, aggregate_top_flows_UDP_IP_fragments_bps[0], "bps")
+netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_IP_fragments_bps[1], "bps")
 
 
 

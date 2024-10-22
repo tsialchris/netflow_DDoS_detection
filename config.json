@@ -24,6 +24,24 @@
 
     "amount_top_flows_UDP_IP_fragments" : 10,
 
+    "amount_top_flows_IPv4_protocol_0" : 10,
+
+    "amount_top_flows_mDNS_reflection_amplification" : 10,
+
+    "amount_top_flows_memcached_amplification" : 10,
+
+    "amount_top_flows_MS_SQL_RS_amplification" : 10,
+
+    "amount_top_flows_netbios_reflection_amplification" : 10,
+
+    "amount_top_flows_RIPv1_reflection_amplification" : 10,
+
+    "amount_top_flows_rpcbind_reflection_amplification" : 10,
+
+    "amount_top_flows_SNMP_amplification" : 10,
+
+    "amount_top_flows_SSDP_amplification" : 10,
+
 
     "general_IP_traffic_bps_threshold" : 100000,
     "general_IP_traffic_pps_threshold" : 100,
@@ -62,5 +80,32 @@
     "TCP_IP_fragments_traffic_pps_threshold" : 10,
 
     "UDP_IP_fragments_traffic_bps_threshold" : 100,
-    "UDP_IP_fragments_traffic_pps_threshold" : 10
+    "UDP_IP_fragments_traffic_pps_threshold" : 10,
+
+    "IPv4_protocol_0_traffic_bps_threshold" : 100,
+    "IPv4_protocol_0_traffic_pps_threshold" : 10,
+
+    "mDNS_reflection_amplification_traffic_bps_threshold" : 100,
+    "mDNS_reflection_amplification_traffic_pps_threshold" : 10,
+
+    "memcached_amplification_traffic_bps_threshold" : 100,
+    "memcached_amplification_traffic_pps_threshold" : 10,
+
+    "MS_SQL_RS_amplification_traffic_bps_threshold" : 100,
+    "MS_SQL_RS_amplification_traffic_pps_threshold" : 10,
+
+    "netbios_reflection_amplification_traffic_bps_threshold" : 100,
+    "netbios_reflection_amplification_traffic_pps_threshold" : 10,
+
+    "RIPv1_reflection_amplification_traffic_bps_threshold" : 100,
+    "RIPv1_reflection_amplification_traffic_pps_threshold" : 10,
+
+    "rpcbind_reflection_amplification_traffic_bps_threshold" : 100,
+    "rpcbind_reflection_amplification_traffic_pps_threshold" : 10,
+
+    "SNMP_amplification_traffic_bps_threshold" : 100,
+    "SNMP_amplification_traffic_pps_threshold" : 10,
+
+    "SSDP_amplification_traffic_bps_threshold" : 100,
+    "SSDP_amplification_traffic_pps_threshold" : 10
 }

@@ -1,4 +1,7 @@
 
+# SEND NOTIFICATIONS IN THE list_functions.py
+
+
 # overall container for all flows
 class netflows:
 
@@ -216,7 +219,7 @@ class netflow_flow:
 
         # if the protocols table is empty, add the first element
         if not self.protocols:
-            new_protocol = netflow_protocol(protocol, self.dst4_addr, tcp_flags)
+            new_protocol = netflow_protocol(self, protocol, self.dst4_addr, tcp_flags)
             self.protocols[protocol] = new_protocol
             self.protocols[protocol].add_port_and_flag(flow, flow_duration)
         else:
@@ -263,7 +266,7 @@ class netflow_flow:
             # DO NOT FORGET! ALSO ADD THE TCP FLAG! (This is done automatically at add_port_and_flag)
             else:
                 # print(self.dst4_addr, ":", tcp_flags)
-                new_protocol = netflow_protocol(protocol, self.dst4_addr, tcp_flags)
+                new_protocol = netflow_protocol(self, protocol, self.dst4_addr, tcp_flags)
                 self.protocols[protocol] = new_protocol
                 self.protocols[protocol].add_port_and_flag(flow, flow_duration)
     
@@ -277,10 +280,11 @@ class netflow_flow:
 # Note: __slots__ could be useful
 
 # goes in netflow_flow
-class netflow_protocol:
+class netflow_protocol(netflow_flow):
 
 
-    def __init__(self, protocol, dst4_addr, tcp_flags):
+    def __init__(self, parent_flow, protocol, dst4_addr, tcp_flags):
+        self.parent_flow = parent_flow
         self.dst4_addr = dst4_addr
         self.proto = protocol
         self.in_bytes = 0
@@ -342,7 +346,7 @@ class netflow_protocol:
                 # print(name, "==", object_name)
                 if name == object_name:
                     # print(obj)
-                    new_object = obj(identifier, self.dst4_addr)
+                    new_object = obj(self, identifier, self.dst4_addr)
                     
             dictionary[identifier] = new_object
             dictionary[identifier].update(flow, flow_duration)
@@ -360,7 +364,7 @@ class netflow_protocol:
                     # print(name, "==", object_name)
                     if name == object_name:
                         # print(obj)
-                        new_object = obj(identifier, self.dst4_addr)
+                        new_object = obj(self, identifier, self.dst4_addr)
                 dictionary[identifier] = new_object
                 dictionary[identifier].update(flow, flow_duration)
 
@@ -408,8 +412,9 @@ class netflow_protocol:
 
 
 # goes in netflow_protocol
-class netflow_port:
-    def __init__(self, dst_port, dst4_addr):
+class netflow_port(netflow_protocol):
+    def __init__(self, parent_protocol, dst_port, dst4_addr):
+        self.parent_protocol = parent_protocol
         self.dst4_addr = dst4_addr
         self.dst_port = dst_port
         self.in_bytes = 0
@@ -425,7 +430,10 @@ class netflow_port:
 
 # goes in netflow_protocol
 class tcp_flag:
-    def __init__(self, flag, dst4_addr):
+    def __init__(self, parent_protocol, flag, dst4_addr):
+
+        self.parent_protocol = parent_protocol
+
         self.dst4_addr = dst4_addr
 
         self.flag = flag
@@ -443,7 +451,9 @@ class tcp_flag:
 
 # goes in netflow_protocol
 class IP_fragment:
-    def __init__(self, identifier, dst4_addr):
+    def __init__(self, parent_protocol, identifier, dst4_addr):
+
+        self.parent_protocol = parent_protocol
 
         self.dst4_addr = dst4_addr
 

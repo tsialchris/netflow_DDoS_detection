@@ -1,8 +1,8 @@
 
 # Here we define the misuse cases
 
-# Left to implement:
-# 
+# SEND NOTIFICATIONS IN THE list_functions.py
+
 
 from misuse_processing import get_threshold_and_top_IP_flows
 from misuse_processing import get_threshold_and_top_protocol_flows
@@ -137,20 +137,125 @@ def UDP_IP_fragments(netflow_flows, amount_top_flows, metric, metric_threshold):
 
     return aggregate_flows
 
+def IPv4_protocol_0(netflow_flows, amount_top_flows, metric, metric_threshold):
+    
+    # protocol == "0" (invalid)
 
-# DONE categories:      13
-# PENDING categories:   12
-# LEFT TO DO:
+    aggregate_flows = get_threshold_and_top_protocol_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "0", "none", True, True, "IPv4_protocol_0")
+
+    return aggregate_flows
+
+def mDNS_reflection_amplification(netflow_flows, amount_top_flows, metric, metric_threshold):
+
+    # mDNS == multicast DNS
+
+    # protocol == "17" (UDP)
+    # src_port == "5353"
+
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "5353", "src", True, True, "mDNS_reflection_amplification")
+
+    return aggregate_flows
+
+def memcached_amplification(netflow_flows, amount_top_flows, metric, metric_threshold):
+
+    # protocol == "17" (UDP)
+    # src_port == "11211"
+
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "11211", "src", True, True, "memcached_amplification")
+
+    return aggregate_flows
+
+def MS_SQL_RS_amplification(netflow_flows, amount_top_flows, metric, metric_threshold):
+
+    # protocol == "17" (UDP)
+    # src_port == "1434"
+
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "1434", "src", True, True, "MS_SQL_RS_amplification")
+
+    return aggregate_flows
+
+def netbios_reflection_amplification_1(netflow_flows, amount_top_flows, metric, metric_threshold):
+
+    # protocol == "17" (UDP)
+    # src_port == "137"
+
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "137", "src", True, True, "netbios_reflection_amplification_1")
+
+    return aggregate_flows
+
+def netbios_reflection_amplification_2(netflow_flows, amount_top_flows, metric, metric_threshold):
+
+    # protocol == "17" (UDP)
+    # src_port == "138"
+
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "138", "src", True, True, "netbios_reflection_amplification_2")
+
+    return aggregate_flows
+
+def RIPv1_reflection_amplification(netflow_flows, amount_top_flows, metric, metric_threshold):
+
+    # protocol == "17" (UDP)
+    # src_port == "520"
+
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "520", "src", True, True, "RIPv1_reflection_amplification")
+
+    return aggregate_flows
+
+def rpcbind_reflection_amplification(netflow_flows, amount_top_flows, metric, metric_threshold):
+
+    # protocol == "17" (UDP)
+    # src_port == "111"
+
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "111", "src", True, True, "rpcbind_reflection_amplification")
+
+    return aggregate_flows
+
+def SNMP_amplification_1(netflow_flows, amount_top_flows, metric, metric_threshold):
+
+    # protocol == "17" (UDP)
+    # src_port == "161"
+
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "161", "src", True, True, "SNMP_amplification_1")
+
+    return aggregate_flows
+
+def SNMP_amplification_2(netflow_flows, amount_top_flows, metric, metric_threshold):
+
+    # protocol == "17" (UDP)
+    # src_port == "162"
+
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "162", "src", True, True, "SNMP_amplification_2")
+
+    return aggregate_flows
+
+def SSDP_amplification(netflow_flows, amount_top_flows, metric, metric_threshold):
+
+    # protocol == "17" (UDP)
+    # src_port == "1900"
+
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "1900", "src", True, True, "SSDP_amplification")
+
+    return aggregate_flows
+
+
+
+
+
+# DONE categories:      22
 # IPv4 Protocol 0
-# L2TP Reflection/Amplification (Needs packet size)
 # mDNS Reflection/Amplification
 # memcached Amplification
 # MS SQL RS Amplification
 # NetBIOS Reflection/Amplification
-# NTP Amplification (Needs packet size)
 # RIPv1 Reflection/Amplification
 # rpcbind Reflection/Amplification
 # SNMP Amplification
 # SSDP Amplification
-# TCP ACK (disabled by default)
 
+
+
+
+# PENDING categories:   3
+# L2TP Reflection/Amplification (Needs packet size)
+# NTP Amplification (Needs packet size)
+# TCP ACK (disabled by default)

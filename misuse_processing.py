@@ -1,3 +1,6 @@
+
+# SEND NOTIFICATIONS IN THE list_functions.py
+
 # Here, we define the functions used in misuse_objects
 
 # misuse_category_name is used to keep track of the misuse type in case of notifications

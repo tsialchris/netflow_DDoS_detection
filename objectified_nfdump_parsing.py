@@ -1,4 +1,6 @@
 
+# SEND NOTIFICATIONS IN THE list_functions.py
+
 import os
 import json
 
@@ -33,6 +35,28 @@ from misuse_objects import DNS_amplification
 from misuse_objects import TCP_IP_fragments
 
 from misuse_objects import UDP_IP_fragments
+
+from misuse_objects import IPv4_protocol_0
+
+from misuse_objects import mDNS_reflection_amplification
+
+from misuse_objects import memcached_amplification
+
+from misuse_objects import MS_SQL_RS_amplification
+
+from misuse_objects import netbios_reflection_amplification_1
+
+from misuse_objects import netbios_reflection_amplification_2
+
+from misuse_objects import RIPv1_reflection_amplification
+
+from misuse_objects import rpcbind_reflection_amplification
+
+from misuse_objects import SNMP_amplification_1
+
+from misuse_objects import SNMP_amplification_2
+
+from misuse_objects import SSDP_amplification
 
 
 
@@ -107,6 +131,33 @@ amount_top_flows_TCP_IP_fragments = config["amount_top_flows_TCP_IP_fragments"]
 # UDP IP fragments
 amount_top_flows_UDP_IP_fragments = config["amount_top_flows_UDP_IP_fragments"]
 
+# IPv4_protocol_0
+amount_top_flows_IPv4_protocol_0 = config["amount_top_flows_IPv4_protocol_0"]
+
+# mDNS_reflection_amplification
+amount_top_flows_mDNS_reflection_amplification = config["amount_top_flows_mDNS_reflection_amplification"]
+
+# memcached_amplification
+amount_top_flows_memcached_amplification = config["amount_top_flows_memcached_amplification"]
+
+# MS_SQL_RS_amplification
+amount_top_flows_MS_SQL_RS_amplification = config["amount_top_flows_MS_SQL_RS_amplification"]
+
+# netbios_reflection_amplification
+amount_top_flows_netbios_reflection_amplification = config["amount_top_flows_netbios_reflection_amplification"]
+
+# RIPv1_reflection_amplification
+amount_top_flows_RIPv1_reflection_amplification = config["amount_top_flows_RIPv1_reflection_amplification"]
+
+# rpcbind_reflection_amplification
+amount_top_flows_rpcbind_reflection_amplification = config["amount_top_flows_rpcbind_reflection_amplification"]
+
+# SNMP_amplification
+amount_top_flows_SNMP_amplification = config["amount_top_flows_SNMP_amplification"]
+
+# SSDP_amplification
+amount_top_flows_SSDP_amplification = config["amount_top_flows_SSDP_amplification"]
+
 
 general_IP_traffic_bps_threshold = config["general_IP_traffic_bps_threshold"]
 general_IP_traffic_pps_threshold = config["general_IP_traffic_pps_threshold"]
@@ -146,6 +197,33 @@ TCP_IP_fragments_traffic_pps_threshold = config["TCP_IP_fragments_traffic_pps_th
 
 UDP_IP_fragments_traffic_bps_threshold = config["UDP_IP_fragments_traffic_bps_threshold"]
 UDP_IP_fragments_traffic_pps_threshold = config["UDP_IP_fragments_traffic_pps_threshold"]
+
+IPv4_protocol_0_traffic_bps_threshold = config["IPv4_protocol_0_traffic_bps_threshold"]
+IPv4_protocol_0_traffic_pps_threshold = config["IPv4_protocol_0_traffic_pps_threshold"]
+
+mDNS_reflection_amplification_traffic_bps_threshold = config["mDNS_reflection_amplification_traffic_bps_threshold"]
+mDNS_reflection_amplification_traffic_pps_threshold = config["mDNS_reflection_amplification_traffic_pps_threshold"]
+
+memcached_amplification_traffic_bps_threshold = config["memcached_amplification_traffic_bps_threshold"]
+memcached_amplification_traffic_pps_threshold = config["memcached_amplification_traffic_pps_threshold"]
+
+MS_SQL_RS_amplification_traffic_bps_threshold = config["MS_SQL_RS_amplification_traffic_bps_threshold"]
+MS_SQL_RS_amplification_traffic_pps_threshold = config["MS_SQL_RS_amplification_traffic_pps_threshold"]
+
+netbios_reflection_amplification_traffic_bps_threshold = config["netbios_reflection_amplification_traffic_bps_threshold"]
+netbios_reflection_amplification_traffic_pps_threshold = config["netbios_reflection_amplification_traffic_pps_threshold"]
+
+RIPv1_reflection_amplification_traffic_bps_threshold = config["RIPv1_reflection_amplification_traffic_bps_threshold"]
+RIPv1_reflection_amplification_traffic_pps_threshold = config["RIPv1_reflection_amplification_traffic_pps_threshold"]
+
+rpcbind_reflection_amplification_traffic_bps_threshold = config["rpcbind_reflection_amplification_traffic_bps_threshold"]
+rpcbind_reflection_amplification_traffic_pps_threshold = config["rpcbind_reflection_amplification_traffic_pps_threshold"]
+
+SNMP_amplification_traffic_bps_threshold = config["SNMP_amplification_traffic_bps_threshold"]
+SNMP_amplification_traffic_pps_threshold = config["SNMP_amplification_traffic_pps_threshold"]
+
+SSDP_amplification_traffic_bps_threshold = config["SSDP_amplification_traffic_bps_threshold"]
+SSDP_amplification_traffic_pps_threshold = config["SSDP_amplification_traffic_pps_threshold"]
 
 # AGGREGATE FLOWS is 2 index list that contains [TOP_LIST, THRESHOLD_DICTIONARY]
 # TOP FLOWS are stored as lists, runtime might suffer for extreme cases
@@ -191,6 +269,39 @@ aggregate_top_flows_TCP_IP_fragments_pps = TCP_IP_fragments(netflow_flows, amoun
 
 aggregate_top_flows_UDP_IP_fragments_bps = UDP_IP_fragments(netflow_flows, amount_top_flows_UDP_IP_fragments, "bps", UDP_IP_fragments_traffic_bps_threshold)
 aggregate_top_flows_UDP_IP_fragments_pps = UDP_IP_fragments(netflow_flows, amount_top_flows_UDP_IP_fragments, "pps", UDP_IP_fragments_traffic_pps_threshold)
+
+aggregate_top_flows_IPv4_protocol_0_bps = IPv4_protocol_0(netflow_flows, amount_top_flows_IPv4_protocol_0, "bps", IPv4_protocol_0_traffic_bps_threshold)
+aggregate_top_flows_IPv4_protocol_0_pps = IPv4_protocol_0(netflow_flows, amount_top_flows_IPv4_protocol_0, "pps", IPv4_protocol_0_traffic_pps_threshold)
+
+aggregate_top_flows_mDNS_reflection_amplification_bps = mDNS_reflection_amplification(netflow_flows, amount_top_flows_mDNS_reflection_amplification, "bps", mDNS_reflection_amplification_traffic_bps_threshold)
+aggregate_top_flows_mDNS_reflection_amplification_pps = mDNS_reflection_amplification(netflow_flows, amount_top_flows_mDNS_reflection_amplification, "pps", mDNS_reflection_amplification_traffic_pps_threshold)
+
+aggregate_top_flows_memcached_amplification_bps = memcached_amplification(netflow_flows, amount_top_flows_memcached_amplification, "bps", memcached_amplification_traffic_bps_threshold)
+aggregate_top_flows_memcached_amplification_pps = memcached_amplification(netflow_flows, amount_top_flows_memcached_amplification, "pps", memcached_amplification_traffic_pps_threshold)
+
+aggregate_top_flows_MS_SQL_RS_amplification_bps = MS_SQL_RS_amplification(netflow_flows, amount_top_flows_MS_SQL_RS_amplification, "bps", MS_SQL_RS_amplification_traffic_bps_threshold)
+aggregate_top_flows_MS_SQL_RS_amplification_pps = MS_SQL_RS_amplification(netflow_flows, amount_top_flows_MS_SQL_RS_amplification, "pps", MS_SQL_RS_amplification_traffic_pps_threshold)
+
+aggregate_top_flows_netbios_reflection_amplification_1_bps = netbios_reflection_amplification_1(netflow_flows, amount_top_flows_netbios_reflection_amplification, "bps", netbios_reflection_amplification_traffic_bps_threshold)
+aggregate_top_flows_netbios_reflection_amplification_1_pps = netbios_reflection_amplification_1(netflow_flows, amount_top_flows_netbios_reflection_amplification, "pps", netbios_reflection_amplification_traffic_pps_threshold)
+
+aggregate_top_flows_netbios_reflection_amplification_2_bps = netbios_reflection_amplification_2(netflow_flows, amount_top_flows_netbios_reflection_amplification, "bps", netbios_reflection_amplification_traffic_bps_threshold)
+aggregate_top_flows_netbios_reflection_amplification_2_pps = netbios_reflection_amplification_2(netflow_flows, amount_top_flows_netbios_reflection_amplification, "pps", netbios_reflection_amplification_traffic_pps_threshold)
+
+aggregate_top_flows_RIPv1_reflection_amplification_bps = RIPv1_reflection_amplification(netflow_flows, amount_top_flows_RIPv1_reflection_amplification, "bps", RIPv1_reflection_amplification_traffic_bps_threshold)
+aggregate_top_flows_RIPv1_reflection_amplification_pps = RIPv1_reflection_amplification(netflow_flows, amount_top_flows_RIPv1_reflection_amplification, "pps", RIPv1_reflection_amplification_traffic_pps_threshold)
+
+aggregate_top_flows_rpcbind_reflection_amplification_bps = rpcbind_reflection_amplification(netflow_flows, amount_top_flows_rpcbind_reflection_amplification, "bps", rpcbind_reflection_amplification_traffic_bps_threshold)
+aggregate_top_flows_rpcbind_reflection_amplification_pps = rpcbind_reflection_amplification(netflow_flows, amount_top_flows_rpcbind_reflection_amplification, "pps", rpcbind_reflection_amplification_traffic_pps_threshold)
+
+aggregate_top_flows_SNMP_amplification_1_bps = SNMP_amplification_1(netflow_flows, amount_top_flows_SNMP_amplification, "bps", SNMP_amplification_traffic_bps_threshold)
+aggregate_top_flows_SNMP_amplification_1_pps = SNMP_amplification_1(netflow_flows, amount_top_flows_SNMP_amplification, "pps", SNMP_amplification_traffic_pps_threshold)
+
+aggregate_top_flows_SNMP_amplification_2_bps = SNMP_amplification_2(netflow_flows, amount_top_flows_SNMP_amplification, "bps", SNMP_amplification_traffic_bps_threshold)
+aggregate_top_flows_SNMP_amplification_2_pps = SNMP_amplification_2(netflow_flows, amount_top_flows_SNMP_amplification, "pps", SNMP_amplification_traffic_pps_threshold)
+
+aggregate_top_flows_SSDP_amplification_bps = SSDP_amplification(netflow_flows, amount_top_flows_SSDP_amplification, "bps", SSDP_amplification_traffic_bps_threshold)
+aggregate_top_flows_SSDP_amplification_pps = SSDP_amplification(netflow_flows, amount_top_flows_SSDP_amplification, "pps", SSDP_amplification_traffic_pps_threshold)
 
 
 # ================================================REMOVE THIS IN PRODUCTION============================================ #
@@ -256,6 +367,74 @@ aggregate_top_flows_UDP_IP_fragments_pps = UDP_IP_fragments(netflow_flows, amoun
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_UDP_IP_fragments_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_IP_fragments_bps[1], "bps")
+
+
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_IPv4_protocol_0_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_IPv4_protocol_0_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_IPv4_protocol_0_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_IPv4_protocol_0_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_mDNS_reflection_amplification_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_mDNS_reflection_amplification_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_mDNS_reflection_amplification_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_mDNS_reflection_amplification_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_memcached_amplification_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_memcached_amplification_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_memcached_amplification_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_memcached_amplification_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_MS_SQL_RS_amplification_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_MS_SQL_RS_amplification_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_MS_SQL_RS_amplification_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_MS_SQL_RS_amplification_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_netbios_reflection_amplification_1_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_netbios_reflection_amplification_1_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_netbios_reflection_amplification_1_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_netbios_reflection_amplification_1_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_netbios_reflection_amplification_2_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_netbios_reflection_amplification_2_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_netbios_reflection_amplification_2_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_netbios_reflection_amplification_2_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_RIPv1_reflection_amplification_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_RIPv1_reflection_amplification_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_RIPv1_reflection_amplification_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_RIPv1_reflection_amplification_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_rpcbind_reflection_amplification_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_rpcbind_reflection_amplification_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_rpcbind_reflection_amplification_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_rpcbind_reflection_amplification_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_SNMP_amplification_1_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_SNMP_amplification_1_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_SNMP_amplification_1_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_SNMP_amplification_1_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_SNMP_amplification_2_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_SNMP_amplification_2_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_SNMP_amplification_2_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_SNMP_amplification_2_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_SSDP_amplification_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_SSDP_amplification_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_SSDP_amplification_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_SSDP_amplification_bps[1], "bps")
 
 
 # ================================================REMOVE THIS IN PRODUCTION============================================ #

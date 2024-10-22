@@ -108,5 +108,6 @@ def threshold_check(threshold_flows, flow, metric, metric_threshold):
     # check if the metric that interests us is over the set threshold
     if getattr(flow, metric) > metric_threshold:
         threshold_flows[flow.dst4_addr] = flow
+        # SEND NOTIFICATIONS HERE
 
     return threshold_flows

@@ -313,26 +313,32 @@ aggregate_top_flows_SSDP_amplification_pps = SSDP_amplification(netflow_flows, a
 
 # THIS is how you PRINT
 
+# netflows.print_top_flows(netflows, aggregate_top_flows_IP_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_IP_pps[1], "pps")
+
 # netflows.print_top_flows(netflows, aggregate_top_flows_IP_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_IP_bps[1], "bps")
 
-# netflows.print_top_flows(netflows, aggregate_top_flows_IP_pps[0], "pps")
-# netflows.print_threshold_flows(netflows, aggregate_top_flows_IP_pps[1], "pps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_UDP_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_pps[1], "pps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_UDP_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_bps[1], "bps")
 
-# netflows.print_top_flows(netflows, aggregate_top_flows_TCP_RST_bps[0], "bps")
-# netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_RST_bps[1], "bps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_TCP_RST_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_RST_pps[1], "pps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_TCP_RST_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_RST_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_TCP_SYN_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_SYN_pps[1], "pps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_TCP_SYN_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_SYN_bps[1], "bps")
 
-# netflows.print_top_flows(netflows, aggregate_top_flows_TCP_SYN_pps[0], "pps")
-# netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_SYN_pps[1], "pps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_TCP_FIN_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_FIN_pps[1], "pps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_TCP_FIN_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_FIN_bps[1], "bps")
@@ -343,8 +349,8 @@ aggregate_top_flows_SSDP_amplification_pps = SSDP_amplification(netflow_flows, a
 # netflows.print_top_flows(netflows, aggregate_top_flows_DNS_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_DNS_bps[1], "bps")
 
-# netflows.print_top_flows(netflows, aggregate_top_flows_ICMP_bps[0], "pps")
-# netflows.print_threshold_flows(netflows, aggregate_top_flows_ICMP_bps[1], "pps")
+# netflows.print_top_flows(netflows, aggregate_top_flows_ICMP_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_ICMP_pps[1], "pps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_ICMP_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_ICMP_bps[1], "bps")

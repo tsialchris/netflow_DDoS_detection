@@ -155,8 +155,12 @@ def calculate_duration(flow):
     # Define the date format
     date_format = "%Y-%m-%dT%H:%M:%S.%f"
 
-    t_first = datetime.strptime(flow["t_first"], date_format)
-    t_last = datetime.strptime(flow["t_last"], date_format)
+    if "t_first" in flow and "t_last" in flow:
+        t_first = datetime.strptime(flow["t_first"], date_format)
+        t_last = datetime.strptime(flow["t_last"], date_format)
+    elif "first" in flow and "last" in flow:
+        t_first = datetime.strptime(flow["first"], date_format)
+        t_last = datetime.strptime(flow["last"], date_format)
 
     duration = abs(t_last - t_first)
 

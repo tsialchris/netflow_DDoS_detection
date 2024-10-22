@@ -78,12 +78,12 @@ class netflows:
                 flow.duration = 1
 
             # METHOD 1
-            # flow.pps = int(flow.in_packets / (flow.duration / flow.number_of_flows))
-            # flow.bps = int(flow.in_bytes / (flow.duration / flow.number_of_flows))
+            flow.pps = int(flow.in_packets / (flow.duration / flow.number_of_flows))
+            flow.bps = int(flow.in_bytes / (flow.duration / flow.number_of_flows))
 
             # METHOD 2
-            flow.pps = int(flow.in_packets / file_duration)
-            flow.bps = int(flow.in_bytes / file_duration)
+            # flow.pps = int(flow.in_packets / file_duration)
+            # flow.bps = int(flow.in_bytes / file_duration)
 
             self.set_flow(destination_IP, flow)
 
@@ -99,12 +99,12 @@ class netflows:
                     protocol_flow.duration = 1
 
                 # METHOD 1
-                # protocol_flow.pps = int(protocol_flow.in_packets / (protocol_flow.duration / protocol_flow.number_of_flows))
-                # protocol_flow.bps = int(protocol_flow.in_bytes / (protocol_flow.duration / protocol_flow.number_of_flows))
+                protocol_flow.pps = int(protocol_flow.in_packets / (protocol_flow.duration / protocol_flow.number_of_flows))
+                protocol_flow.bps = int(protocol_flow.in_bytes / (protocol_flow.duration / protocol_flow.number_of_flows))
 
                 # METHOD 2
-                protocol_flow.pps = int(protocol_flow.in_packets / file_duration)
-                protocol_flow.bps = int(protocol_flow.in_bytes / file_duration)
+                # protocol_flow.pps = int(protocol_flow.in_packets / file_duration)
+                # protocol_flow.bps = int(protocol_flow.in_bytes / file_duration)
 
                 # set the metrics
                 self.set_protocol(destination_IP, protocol, protocol_flow)
@@ -116,12 +116,12 @@ class netflows:
                         tcp_flag_flow.duration = 1
 
                     # METHOD 1
-                    # tcp_flag_flow.pps = int(tcp_flag_flow.in_packets / (tcp_flag_flow.duration / tcp_flag_flow.number_of_flows))
-                    # tcp_flag_flow.bps = int(tcp_flag_flow.in_bytes / (tcp_flag_flow.duration / tcp_flag_flow.number_of_flows))
+                    tcp_flag_flow.pps = int(tcp_flag_flow.in_packets / (tcp_flag_flow.duration / tcp_flag_flow.number_of_flows))
+                    tcp_flag_flow.bps = int(tcp_flag_flow.in_bytes / (tcp_flag_flow.duration / tcp_flag_flow.number_of_flows))
 
                     # METHOD 2
-                    tcp_flag_flow.pps = int(tcp_flag_flow.in_packets / file_duration)
-                    tcp_flag_flow.bps = int(tcp_flag_flow.in_bytes / file_duration)
+                    # tcp_flag_flow.pps = int(tcp_flag_flow.in_packets / file_duration)
+                    # tcp_flag_flow.bps = int(tcp_flag_flow.in_bytes / file_duration)
 
                     self.set_tcp_flag(destination_IP, protocol, tcp_flag_var, tcp_flag_flow)
 
@@ -137,12 +137,12 @@ class netflows:
                         port_flow.duration = 1
 
                     # METHOD 1
-                    # port_flow.pps = int(port_flow.in_packets / (port_flow.duration / port_flow.number_of_flows))
-                    # port_flow.bps = int(port_flow.in_bytes / (port_flow.duration / port_flow.number_of_flows))
+                    port_flow.pps = int(port_flow.in_packets / (port_flow.duration / port_flow.number_of_flows))
+                    port_flow.bps = int(port_flow.in_bytes / (port_flow.duration / port_flow.number_of_flows))
 
                     # METHOD 2
-                    port_flow.pps = int(port_flow.in_packets / file_duration)
-                    port_flow.bps = int(port_flow.in_bytes / file_duration)
+                    # port_flow.pps = int(port_flow.in_packets / file_duration)
+                    # port_flow.bps = int(port_flow.in_bytes / file_duration)
 
 
                     self.set_dst_port(destination_IP, protocol, port, port_flow)
@@ -159,12 +159,12 @@ class netflows:
                         port_flow.duration = 1
 
                     # METHOD 1
-                    # port_flow.pps = int(port_flow.in_packets / (port_flow.duration / port_flow.number_of_flows))
-                    # port_flow.bps = int(port_flow.in_bytes / (port_flow.duration / port_flow.number_of_flows))
+                    port_flow.pps = int(port_flow.in_packets / (port_flow.duration / port_flow.number_of_flows))
+                    port_flow.bps = int(port_flow.in_bytes / (port_flow.duration / port_flow.number_of_flows))
 
                     # METHOD 2
-                    port_flow.pps = int(port_flow.in_packets / file_duration)
-                    port_flow.bps = int(port_flow.in_bytes / file_duration)
+                    # port_flow.pps = int(port_flow.in_packets / file_duration)
+                    # port_flow.bps = int(port_flow.in_bytes / file_duration)
 
 
                     self.set_src_port(destination_IP, protocol, port, port_flow)
@@ -214,7 +214,10 @@ class netflow_flow:
 
         protocol = str(flow["proto"])
 
-        tcp_flags = repr(flow["tcp_flags"])
+        if "tcp_flags" in flow:
+            tcp_flags = repr(flow["tcp_flags"])
+        else:
+            tcp_flags = repr("........")
 
 
         # if the protocols table is empty, add the first element
@@ -371,7 +374,11 @@ class netflow_protocol(netflow_flow):
         return dictionary
 
     def add_tcp_flag(self, flow, flow_duration):
-        tcp_flag_string = repr(flow["tcp_flags"])
+
+        if "tcp_flags" in flow:
+            tcp_flag_string = repr(flow["tcp_flags"])
+        else:
+            tcp_flag_string = repr("........")
 
         self.tcp_flags = self.add_to_category(self.tcp_flags, "tcp_flag", tcp_flag_string, flow, flow_duration)
 

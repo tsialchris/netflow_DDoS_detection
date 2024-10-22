@@ -238,8 +238,14 @@ def SSDP_amplification(netflow_flows, amount_top_flows, metric, metric_threshold
     return aggregate_flows
 
 
+def NTP_amplification(netflow_flows, amount_top_flows, metric, metric_threshold):
 
+    # protocol == "17" (UDP)
+    # src_port == "123"
 
+    aggregate_flows = get_threshold_and_top_port_flows(netflow_flows, amount_top_flows, metric, metric_threshold, "17", "123", "src", True, True, "NTP_amplification")
+
+    return aggregate_flows
 
 # DONE categories:      22
 # IPv4 Protocol 0
@@ -253,9 +259,11 @@ def SSDP_amplification(netflow_flows, amount_top_flows, metric, metric_threshold
 # SSDP Amplification
 
 
-
-
-# PENDING categories:   3
-# L2TP Reflection/Amplification (Needs packet size)
+# TO DO:
 # NTP Amplification (Needs packet size)
+
+
+
+# PENDING categories:   2
+# L2TP Reflection/Amplification (Needs packet size)
 # TCP ACK (disabled by default)

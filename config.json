@@ -42,6 +42,8 @@
 
     "amount_top_flows_SSDP_amplification" : 10,
 
+    "amount_top_flows_NTP_amplification" : 10,
+
 
     "general_IP_traffic_bps_threshold" : 100000,
     "general_IP_traffic_pps_threshold" : 100,
@@ -107,5 +109,8 @@
     "SNMP_amplification_traffic_pps_threshold" : 10,
 
     "SSDP_amplification_traffic_bps_threshold" : 100,
-    "SSDP_amplification_traffic_pps_threshold" : 10
+    "SSDP_amplification_traffic_pps_threshold" : 10,
+    
+    "NTP_amplification_traffic_bps_threshold" : 100,
+    "NTP_amplification_traffic_pps_threshold" : 10
 }

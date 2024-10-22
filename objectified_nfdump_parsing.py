@@ -58,6 +58,8 @@ from misuse_objects import SNMP_amplification_2
 
 from misuse_objects import SSDP_amplification
 
+from misuse_objects import NTP_amplification
+
 
 
 # read the json file with all the flows
@@ -66,9 +68,11 @@ from misuse_objects import SSDP_amplification
 # to parse, iterate through the table "flows"
 # each index is a dictionary
 
-reading_file_location = "./nfcapd_latest.json"
+# reading_file_location = "./nfcapd_latest.json"
 
-# reading_file_location = "./syn_1.json"
+# icmp-src53.json "./syn_1.json"
+
+reading_file_location = "./icmp-src53.json"
 
 if os.path.isfile(reading_file_location):
     with open(reading_file_location, "r") as file:
@@ -158,6 +162,8 @@ amount_top_flows_SNMP_amplification = config["amount_top_flows_SNMP_amplificatio
 # SSDP_amplification
 amount_top_flows_SSDP_amplification = config["amount_top_flows_SSDP_amplification"]
 
+# NTP_amplification
+amount_top_flows_NTP_amplification = config["amount_top_flows_NTP_amplification"]
 
 general_IP_traffic_bps_threshold = config["general_IP_traffic_bps_threshold"]
 general_IP_traffic_pps_threshold = config["general_IP_traffic_pps_threshold"]
@@ -224,6 +230,9 @@ SNMP_amplification_traffic_pps_threshold = config["SNMP_amplification_traffic_pp
 
 SSDP_amplification_traffic_bps_threshold = config["SSDP_amplification_traffic_bps_threshold"]
 SSDP_amplification_traffic_pps_threshold = config["SSDP_amplification_traffic_pps_threshold"]
+
+NTP_amplification_traffic_bps_threshold = config["NTP_amplification_traffic_bps_threshold"]
+NTP_amplification_traffic_pps_threshold = config["NTP_amplification_traffic_pps_threshold"]
 
 # AGGREGATE FLOWS is 2 index list that contains [TOP_LIST, THRESHOLD_DICTIONARY]
 # TOP FLOWS are stored as lists, runtime might suffer for extreme cases
@@ -303,6 +312,9 @@ aggregate_top_flows_SNMP_amplification_2_pps = SNMP_amplification_2(netflow_flow
 aggregate_top_flows_SSDP_amplification_bps = SSDP_amplification(netflow_flows, amount_top_flows_SSDP_amplification, "bps", SSDP_amplification_traffic_bps_threshold)
 aggregate_top_flows_SSDP_amplification_pps = SSDP_amplification(netflow_flows, amount_top_flows_SSDP_amplification, "pps", SSDP_amplification_traffic_pps_threshold)
 
+aggregate_top_flows_NTP_amplification_bps = NTP_amplification(netflow_flows, amount_top_flows_NTP_amplification, "bps", NTP_amplification_traffic_bps_threshold)
+aggregate_top_flows_NTP_amplification_pps = NTP_amplification(netflow_flows, amount_top_flows_NTP_amplification, "pps", NTP_amplification_traffic_pps_threshold)
+
 
 # ================================================REMOVE THIS IN PRODUCTION============================================ #
 # aggregate_top_flows_12345_bps = total_X_port(netflow_flows, 10, "bps", 10, "6", "12345")
@@ -361,6 +373,18 @@ aggregate_top_flows_SSDP_amplification_pps = SSDP_amplification(netflow_flows, a
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_chargen_amplification_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_chargen_amplification_bps[1], "bps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_CLDAP_amplification_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_CLDAP_amplification_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_CLDAP_amplification_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_CLDAP_amplification_bps[1], "bps")
+
+netflows.print_top_flows(netflows, aggregate_top_flows_DNS_amplification_pps[0], "pps")
+netflows.print_threshold_flows(netflows, aggregate_top_flows_DNS_amplification_pps[1], "pps")
+
+netflows.print_top_flows(netflows, aggregate_top_flows_DNS_amplification_bps[0], "bps")
+netflows.print_threshold_flows(netflows, aggregate_top_flows_DNS_amplification_bps[1], "bps")
 
 # netflows.print_top_flows(netflows, aggregate_top_flows_TCP_IP_fragments_pps[0], "pps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_TCP_IP_fragments_pps[1], "pps")
@@ -442,6 +466,11 @@ aggregate_top_flows_SSDP_amplification_pps = SSDP_amplification(netflow_flows, a
 # netflows.print_top_flows(netflows, aggregate_top_flows_SSDP_amplification_bps[0], "bps")
 # netflows.print_threshold_flows(netflows, aggregate_top_flows_SSDP_amplification_bps[1], "bps")
 
+# netflows.print_top_flows(netflows, aggregate_top_flows_NTP_amplification_pps[0], "pps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_NTP_amplification_pps[1], "pps")
+
+# netflows.print_top_flows(netflows, aggregate_top_flows_NTP_amplification_bps[0], "bps")
+# netflows.print_threshold_flows(netflows, aggregate_top_flows_NTP_amplification_bps[1], "bps")
 
 # ================================================REMOVE THIS IN PRODUCTION============================================ #
 # netflows.print_top_flows(netflows, aggregate_top_flows_12345_bps[0], "bps")

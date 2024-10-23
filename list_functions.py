@@ -110,4 +110,15 @@ def threshold_check(threshold_flows, flow, metric, metric_threshold):
         threshold_flows[flow.dst4_addr] = flow
         # SEND NOTIFICATIONS HERE
 
+        import logging
+
+        # Configure the logging
+        logging.basicConfig(level=logging.DEBUG,
+                            format='%(asctime)s - %(levelname)s - %(message)s',
+                            handlers=[
+                                logging.FileHandler("output.log", mode='a')
+                            ])
+
+        logging.warning("dst4_addr: %s || metric: %s || threshold: %s || value: %s" % (flow.dst4_addr, metric, metric_threshold, getattr(flow, metric)))
+
     return threshold_flows

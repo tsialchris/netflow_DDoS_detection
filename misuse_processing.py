@@ -22,7 +22,7 @@ def get_threshold_and_top_IP_flows(netflow_flows, number_of_flows, metric, metri
 
             if threshold_flag:
                 # check if the metric that interests us is over the set threshold
-                threshold_flows = threshold_check(threshold_flows, IP_flow, metric, metric_threshold)
+                threshold_flows = threshold_check(threshold_flows, IP_flow, metric, metric_threshold, misuse_category_name)
 
         sorted_threshold_flows = dict(sorted(threshold_flows.items(), 
                                      key=lambda item: getattr(item[1], metric), 
@@ -65,7 +65,7 @@ def get_threshold_and_top_protocol_flows(netflow_flows, number_of_flows, metric,
 
                             if threshold_flag:
                                 # check if the metric that interests us is over the set threshold
-                                threshold_flows = threshold_check(threshold_flows, flagged_protocol_flow, metric, metric_threshold)
+                                threshold_flows = threshold_check(threshold_flows, flagged_protocol_flow, metric, metric_threshold, misuse_category_name)
 
                     # else, if we are looking for IP fragments
                     elif "IP_fragments" in misuse_category_name:
@@ -81,7 +81,7 @@ def get_threshold_and_top_protocol_flows(netflow_flows, number_of_flows, metric,
 
                             if threshold_flag:
                                 # check if the metric that interests us is over the set threshold
-                                threshold_flows = threshold_check(threshold_flows, fragged_protocol_flow, metric, metric_threshold)
+                                threshold_flows = threshold_check(threshold_flows, fragged_protocol_flow, metric, metric_threshold, misuse_category_name)
                         
                         else:
                             # print("No fragments found for this flow")
@@ -95,7 +95,7 @@ def get_threshold_and_top_protocol_flows(netflow_flows, number_of_flows, metric,
 
                         if threshold_flag:
                             # check if the metric that interests us is over the set threshold
-                            threshold_flows = threshold_check(threshold_flows, protocol_flow, metric, metric_threshold)
+                            threshold_flows = threshold_check(threshold_flows, protocol_flow, metric, metric_threshold, misuse_category_name)
 
 
         sorted_threshold_flows = dict(sorted(threshold_flows.items(), 
@@ -142,7 +142,7 @@ def get_threshold_and_top_port_flows(netflow_flows, number_of_flows, metric, met
 
                             if threshold_flag:
                                 # check if the metric that interests us is over the set threshold
-                                threshold_flows = threshold_check(threshold_flows, port_flow, metric, metric_threshold)
+                                threshold_flows = threshold_check(threshold_flows, port_flow, metric, metric_threshold, misuse_category_name)
 
         
         sorted_threshold_flows = dict(sorted(threshold_flows.items(), 

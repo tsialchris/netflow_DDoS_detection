@@ -1,6 +1,6 @@
-2024-10-23 14:29:31,804 - WARNING - dst4_addr: 212.205.221.3 || metric: bps || threshold: 100000 || value: 1336629
-2024-10-23 14:29:31,804 - WARNING - dst4_addr: 212.205.221.3 || metric: pps || threshold: 100 || value: 2002
-2024-10-23 14:29:31,805 - WARNING - dst4_addr: 212.205.221.3 || metric: bps || threshold: 100000 || value: 1336629
-2024-10-23 14:29:31,805 - WARNING - dst4_addr: 212.205.221.3 || metric: pps || threshold: 100 || value: 2002
-2024-10-23 14:29:31,805 - WARNING - dst4_addr: 212.205.221.3 || metric: bps || threshold: 100 || value: 1336629
-2024-10-23 14:29:31,805 - WARNING - dst4_addr: 212.205.221.3 || metric: pps || threshold: 10 || value: 2002
+2024-10-24 21:10:16,571 - WARNING - || Misuse Category: total_traffic || dst4_addr: 212.205.221.3 || metric: bps || threshold: 100000 || value: 1336629 || Flow ID: 2dd147dc8aeb119f2d94f2f8186502c7bacffe8687457d76e56a5d6de34a60314584a6aa8571be2eeedf7d149d0e66515c600ddc619bcd553942aaee71b196aa ||
+2024-10-24 21:10:16,572 - WARNING - || Misuse Category: total_traffic || dst4_addr: 212.205.221.3 || metric: pps || threshold: 100 || value: 2002 || Flow ID: 2dd147dc8aeb119f2d94f2f8186502c7bacffe8687457d76e56a5d6de34a60314584a6aa8571be2eeedf7d149d0e66515c600ddc619bcd553942aaee71b196aa ||
+2024-10-24 21:10:16,572 - WARNING - || Misuse Category: total_UDP_traffic || dst4_addr: 212.205.221.3 || metric: bps || threshold: 100000 || value: 1336629 || Flow ID: 0d72f93ea75b103d74675fba1c7e6491c84cb2eb2b7b8537e0a10bf38a3d6fb3f549187b0fc765eb658834a0e3844327dbf228100d18340eb86ddb10c1233a2b ||
+2024-10-24 21:10:16,572 - WARNING - || Misuse Category: total_UDP_traffic || dst4_addr: 212.205.221.3 || metric: pps || threshold: 100 || value: 2002 || Flow ID: 0d72f93ea75b103d74675fba1c7e6491c84cb2eb2b7b8537e0a10bf38a3d6fb3f549187b0fc765eb658834a0e3844327dbf228100d18340eb86ddb10c1233a2b ||
+2024-10-24 21:10:16,573 - WARNING - || Misuse Category: UDP_IP_fragments || dst4_addr: 212.205.221.3 || metric: bps || threshold: 100 || value: 1336629 || Flow ID: 93b3b96927cd1c40352727a7f0ee3da59d62ac24bb648b02c6e1784b568e526c9374f24bc05ee2c256ffbbe951143641057721dc3c9d29bc5e96382232397f9d ||
+2024-10-24 21:10:16,573 - WARNING - || Misuse Category: UDP_IP_fragments || dst4_addr: 212.205.221.3 || metric: pps || threshold: 10 || value: 2002 || Flow ID: 93b3b96927cd1c40352727a7f0ee3da59d62ac24bb648b02c6e1784b568e526c9374f24bc05ee2c256ffbbe951143641057721dc3c9d29bc5e96382232397f9d ||

@@ -222,6 +222,10 @@ class netflow_flow:
     
     def __init__(self, destination_IP):
         self.dst4_addr = destination_IP
+
+        from list_functions import create_sha512_hash
+        self.hash_value = create_sha512_hash(destination_IP, destination_IP, destination_IP)
+
         self.in_bytes = 0
         self.in_packets = 0
         self.duration = 0
@@ -246,7 +250,7 @@ class netflow_flow:
 
         # if the protocols table is empty, add the first element
         if not self.protocols:
-            new_protocol = netflow_protocol(self, protocol, self.dst4_addr, tcp_flags)
+            new_protocol = netflow_protocol(self, protocol, self.dst4_addr)
             self.protocols[protocol] = new_protocol
             self.protocols[protocol].add_port_and_flag(flow, flow_duration)
         else:
@@ -293,7 +297,7 @@ class netflow_flow:
             # DO NOT FORGET! ALSO ADD THE TCP FLAG! (This is done automatically at add_port_and_flag)
             else:
                 # print(self.dst4_addr, ":", tcp_flags)
-                new_protocol = netflow_protocol(self, protocol, self.dst4_addr, tcp_flags)
+                new_protocol = netflow_protocol(self, protocol, self.dst4_addr)
                 self.protocols[protocol] = new_protocol
                 self.protocols[protocol].add_port_and_flag(flow, flow_duration)
     
@@ -310,10 +314,14 @@ class netflow_flow:
 class netflow_protocol(netflow_flow):
 
 
-    def __init__(self, parent_flow, protocol, dst4_addr, tcp_flags):
+    def __init__(self, parent_flow, protocol, dst4_addr):
         self.parent_flow = parent_flow
         self.dst4_addr = dst4_addr
         self.proto = protocol
+
+        from list_functions import create_sha512_hash
+        self.hash_value = create_sha512_hash(dst4_addr, protocol, protocol)
+
         self.in_bytes = 0
         self.in_packets = 0
         self.duration = 0
@@ -450,10 +458,14 @@ class netflow_protocol(netflow_flow):
 
 # goes in netflow_protocol
 class netflow_port(netflow_protocol):
-    def __init__(self, parent_protocol, dst_port, dst4_addr):
+    def __init__(self, parent_protocol, port, dst4_addr):
         self.parent_protocol = parent_protocol
         self.dst4_addr = dst4_addr
-        self.dst_port = dst_port
+        self.port = port
+
+        from list_functions import create_sha512_hash
+        self.hash_value = create_sha512_hash(dst4_addr, parent_protocol.proto, port)
+
         self.in_bytes = 0
         self.in_packets = 0
         self.number_of_flows = 0
@@ -474,11 +486,15 @@ class tcp_flag:
         self.dst4_addr = dst4_addr
 
         self.flag = flag
+
+        from list_functions import create_sha512_hash
+        self.hash_value = create_sha512_hash(dst4_addr, parent_protocol.proto, flag)
         
         self.in_bytes = 0
         self.in_packets = 0
         self.number_of_flows = 0
         self.duration = 0
+
     
     def update(self, flow, flow_duration):
         self.in_bytes = self.in_bytes + flow["in_bytes"]
@@ -489,7 +505,7 @@ class tcp_flag:
 # goes in netflow_protocol
 class IP_fragment:
     def __init__(self, parent_protocol, identifier, dst4_addr):
-
+        
         self.parent_protocol = parent_protocol
 
         self.dst4_addr = dst4_addr
@@ -498,11 +514,15 @@ class IP_fragment:
         # the identifier is always == dst4_addr
         # since this is the IP_fragment identifier
         self.identifier = dst4_addr
+
+        from list_functions import create_sha512_hash
+        self.hash_value = create_sha512_hash(dst4_addr, parent_protocol.proto, "IP_fragment")
         
         self.in_bytes = 0
         self.in_packets = 0
         self.number_of_flows = 0
         self.duration = 0
+        
     
     def update(self, flow, flow_duration):
         self.in_bytes = self.in_bytes + flow["in_bytes"]

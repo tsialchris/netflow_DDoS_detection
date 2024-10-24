@@ -13,18 +13,18 @@ def print_over_threshold_list(list, metric):
     print("------------------------------")
 
 
-def flows_over_threshold_check(flows_over_threshold, flow, protocol, port):
+# def flows_over_threshold_check(flows_over_threshold, flow, protocol, port):
 
-    bbs_threshold = 10000
+#     bbs_threshold = 10000
 
-    pps_threshold = 100
+#     pps_threshold = 100
     
-    if (flow["proto"] == protocol or protocol == "protocol_irrelevant") and (flow["dst_port"] == port or port == "port_irrelevant"):
+#     if (flow["proto"] == protocol or protocol == "protocol_irrelevant") and (flow["dst_port"] == port or port == "port_irrelevant"):
 
-        if flow["bps"] > bbs_threshold:
-            flows_over_threshold.append(flow)
+#         if flow["bps"] > bbs_threshold:
+#             flows_over_threshold.append(flow)
         
-        elif flow["pps"] > pps_threshold:
-            flows_over_threshold.append(flow)
+#         elif flow["pps"] > pps_threshold:
+#             flows_over_threshold.append(flow)
 
-    return flows_over_threshold
+#     return flows_over_threshold

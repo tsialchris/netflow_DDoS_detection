@@ -104,7 +104,7 @@ def check_and_insert(top_flows, flow_to_be_added, number_of_flows, metric):
     
     return top_flows
 
-def threshold_check(threshold_flows, flow, metric, metric_threshold):
+def threshold_check(threshold_flows, flow, metric, metric_threshold, misuse_category_name):
     # check if the metric that interests us is over the set threshold
     if getattr(flow, metric) > metric_threshold:
         threshold_flows[flow.dst4_addr] = flow
@@ -119,6 +119,24 @@ def threshold_check(threshold_flows, flow, metric, metric_threshold):
                                 logging.FileHandler("output.log", mode='a')
                             ])
 
-        logging.warning("dst4_addr: %s || metric: %s || threshold: %s || value: %s" % (flow.dst4_addr, metric, metric_threshold, getattr(flow, metric)))
+        logging.warning("|| Misuse Category: %s || dst4_addr: %s || metric: %s || threshold: %s || value: %s || Flow ID: %s ||" % 
+                        (misuse_category_name, flow.dst4_addr, metric, metric_threshold, getattr(flow, metric), flow.hash_value))
 
     return threshold_flows
+
+
+def create_sha512_hash(var1, var2, var3):
+
+    import hashlib
+
+    # Concatenate the variables into a single string
+    data = f"{var1}{var2}{var3}"
+    
+    # Encode the string into bytes, required for hashing
+    data_bytes = data.encode('utf-8')
+    
+    # Create SHA-512 hash object
+    sha512_hash = hashlib.sha512(data_bytes)
+    
+    # Return the hexadecimal digest of the hash
+    return sha512_hash.hexdigest()

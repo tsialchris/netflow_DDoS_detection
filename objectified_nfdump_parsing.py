@@ -61,6 +61,9 @@ from misuse_objects import SSDP_amplification
 from misuse_objects import NTP_amplification
 
 
+# f = open("./output.log", "a")
+# f.write("==================================================================================================================\n")
+# f.close()
 
 # read the json file with all the flows
 # store them in "flows" as json objects
@@ -501,3 +504,7 @@ netflows.print_threshold_flows(netflows, aggregate_top_flows_UDP_IP_fragments_bp
 # ".....R.."    => only RESET flag set
 # "......S."    => only SYN flag set
 # ".......F"    => only FIN flag set
+
+f = open("./output.log", "a")
+f.write("==================================================END OF INTERVAL==================================================\n")
+f.close()

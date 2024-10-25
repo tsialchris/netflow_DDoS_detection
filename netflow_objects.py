@@ -495,7 +495,6 @@ class tcp_flag:
         self.number_of_flows = 0
         self.duration = 0
 
-    
     def update(self, flow, flow_duration):
         self.in_bytes = self.in_bytes + flow["in_bytes"]
         self.in_packets = self.in_packets + flow["in_packets"]

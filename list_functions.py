@@ -104,26 +104,6 @@ def check_and_insert(top_flows, flow_to_be_added, number_of_flows, metric):
     
     return top_flows
 
-def threshold_check(threshold_flows, flow, metric, metric_threshold, misuse_category_name):
-    # check if the metric that interests us is over the set threshold
-    if getattr(flow, metric) > metric_threshold:
-        threshold_flows[flow.dst4_addr] = flow
-        # SEND NOTIFICATIONS HERE
-
-        import logging
-
-        # Configure the logging
-        logging.basicConfig(level=logging.DEBUG,
-                            format='%(asctime)s - %(levelname)s - %(message)s',
-                            handlers=[
-                                logging.FileHandler("output.log", mode='a')
-                            ])
-
-        logging.warning("|| Misuse Category: %s || dst4_addr: %s || metric: %s || threshold: %s || value: %s || Flow ID: %s ||" % 
-                        (misuse_category_name, flow.dst4_addr, metric, metric_threshold, getattr(flow, metric), flow.hash_value))
-
-    return threshold_flows
-
 
 def create_sha512_hash(var1, var2, var3):
 
@@ -140,3 +120,31 @@ def create_sha512_hash(var1, var2, var3):
     
     # Return the hexadecimal digest of the hash
     return sha512_hash.hexdigest()
+
+
+def threshold_check(threshold_flows, flow, metric, metric_threshold, misuse_category_name):
+    # check if the metric that interests us is over the set threshold
+    if getattr(flow, metric) > metric_threshold:
+        threshold_flows[flow.dst4_addr] = flow
+        # SEND NOTIFICATIONS HERE
+
+        import logging
+
+        # Configure the logging
+        logging.basicConfig(level=logging.INFO,
+                            format='%(asctime)s - %(levelname)s - %(message)s',
+                            handlers=[
+                                logging.FileHandler("output.log", mode='a')
+                            ])
+
+        # need to create a new hash value for the log (take the existing hash, add the metric and hash again)
+        # this is done to differentiate between pps and bps
+        log_hash = create_sha512_hash(flow.hash_value, metric, metric)
+
+        logging.info("|| Misuse Category: %s || dst4_addr: %s || metric: %s || threshold: %s || value: %s || Flow ID: %s ||" % 
+                        (misuse_category_name, flow.dst4_addr, metric, metric_threshold, getattr(flow, metric), log_hash))
+
+    return threshold_flows
+
+
+

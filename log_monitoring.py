@@ -42,23 +42,25 @@ for line in lines:
             monitored_flows[flow_ID] = Flow_Tracker(flow_ID, misuse_category, dst4_addr, 
                                                     metric, metric_threshold, value)
         else:
-            flow = monitored_flows[flow_ID]
-            flow.increment_active_counter()
-            flow.isActive = True
+            monitored_flows[flow_ID].increment_active_counter()
+            monitored_flows[flow_ID].isActive = True
 
     # if we spot "END OF INTERVAL", make all flows inactive,
     # purge any flows that are not active (and are below the threshold for alert triggering)
     elif "END OF INTERVAL" in line:
-        for flow_ID in monitored_flows:
+        # this for loop is written like this to be able to delete items during the iteration itself
+        # otherwise you get a runtime error
+        # it represents:
+        # for flow_ID in monitored_flows:
+        for flow_ID in list(monitored_flows.keys()):
             # print(monitored_flows[flow_ID])
-            flow = monitored_flows[flow_ID]
-            if flow.isActive:
-                flow.isActive = False
+            if monitored_flows[flow_ID].isActive:
+                monitored_flows[flow_ID].isActive = False
 
             # else, purge
             else:
-                if flow.active_counter < repetition_threshold:
-                    del flow
+                if monitored_flows[flow_ID].active_counter < repetition_threshold:
+                    del monitored_flows[flow_ID]
 
 # SEND NOTIFICATIONS HERE
 import logging

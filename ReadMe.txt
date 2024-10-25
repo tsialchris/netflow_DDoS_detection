@@ -25,4 +25,17 @@ objectified_nfdump_parsing.py
 the correct categories in the main script
 (objectified_nfdump_parsing.py)
 
+Output:
+output.log
+
+==========================================================
+Post log processing is also done to produce alerts based on
+the output of the objectified_nfdump_parsing.py script.
+
+For post log processing, run:
+log_monitoring.py
+
+Output:
+alerts.log
+
 ==========================================================
